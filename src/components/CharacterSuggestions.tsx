@@ -14,7 +14,7 @@ export default function CharacterSuggestions({ characterName, setCharacterName }
       if (characterName.length > 2) {
         try {
           console.log("🔍 Buscando todos os personagens...");
-          const response = await fetch("https://thronesapi-1.onrender.com/api/characters/character-all/");
+          const response = await fetch("https://thronesapi-1.onrender.com/api/character-all/");
           if (!response.ok) throw new Error("Erro ao buscar personagens");
 
           const data = await response.json();

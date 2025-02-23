@@ -43,7 +43,7 @@ export function useUpload(): UploadHookReturn {
 
           console.log('Dados sendo enviados para a API:', { ...characterData, imageUrl });
 
-          await axios.post('https://thronesapi-1.onrender.com/api/characters/character', {
+          await axios.post('https://thronesapi-1.onrender.com/api/character', {
             ...characterData,
             imageUrl, 
           });

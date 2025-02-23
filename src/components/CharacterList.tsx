@@ -10,7 +10,7 @@ export default function CharacterList() {
   // Função para buscar os personagens da API
   const fetchCharacters = async () => {
     try {
-      const response = await axios.get('https://thronesapi-1.onrender.com/api/characters/character/all'); // Rota para obter todos os personagens
+      const response = await axios.get('https://thronesapi-1.onrender.com/api/character-all'); // Rota para obter todos os personagens
       setCharacters(response.data);
     } catch (error) {
       console.error('Erro ao buscar personagens:', error);
@@ -21,7 +21,7 @@ export default function CharacterList() {
   const handleDelete = async (id: number) => {
     if (confirm('Tem certeza que deseja deletar este personagem?')) {
       try {
-        await axios.delete(`https://thronesapi-1.onrender.com/api/characters/character/${id}`); // Chama a rota de deleção
+        await axios.delete(`https://thronesapi-1.onrender.com/api/character/${id}`); // Chama a rota de deleção
         fetchCharacters(); // Recarrega os personagens após a deleção
       } catch (error) {
         console.error('Erro ao deletar personagem:', error);
@@ -32,7 +32,7 @@ export default function CharacterList() {
   // Função para editar um personagem
   const handleEdit = (id: number) => {
     // Redireciona para a página de edição de personagem com o ID do personagem
-    router.push(`https://thronesapi-1.onrender.com/api/characters/character/${id}`);
+    router.push(`https://thronesapi-1.onrender.com/api/character/${id}`);
   };
 
   useEffect(() => {

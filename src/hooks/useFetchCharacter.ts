@@ -12,7 +12,7 @@ export default function useFetchCharacter() {
     setErrorMessage(null);
 
     try {
-      const response = await fetch(`https://thronesapi-1.onrender.com/api/characters/character?name=${characterName}`);
+      const response = await fetch(`https://thronesapi-1.onrender.com/api/character?name=${characterName}`);
 
       if (!response.ok) {
         throw new Error('Erro ao buscar o personagem');
