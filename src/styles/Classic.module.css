@@ -87,8 +87,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: #786C08 3px solid;
-  background-color: #686020; 
   color: white;
   font-weight: bold;
   height: 80px;
@@ -134,8 +132,8 @@
 }
 
 .boxGreen {
-  background-color: #4CAF50;
-  border-color: #388E3C;
+  background-color: #686020;
+  border-color: #786C08;
 }
 
 .boxRed {
@@ -143,3 +141,76 @@
   border-color: #D32F2F;
 }
 
+/* MODALZIN */
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalContent {
+  background: #1c1c1c;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  text-align: center;
+  color: white;
+  max-width: 400px;
+  width: 90%;
+  border: 2px solid #c79c57; /* Borda dourada */
+}
+
+.characterImage {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  display: block;
+  margin: 10px auto;
+}
+
+.blockquote {
+  font-style: italic;
+  font-size: 1.1rem;
+  margin: 10px auto;
+  max-width: 80%;
+  color: #d8af6f;
+}
+
+.disabledText {
+  color: gray;
+  font-style: italic;
+  cursor: not-allowed;
+}
+
+.countdown {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #f4a261;
+}
+
+.hr {
+  border: none;
+  height: 1px;
+  background: white;
+  width: 80%;
+  margin: 15px auto;
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.icon {
+  font-size: 2rem;
+  cursor: pointer;
+}
