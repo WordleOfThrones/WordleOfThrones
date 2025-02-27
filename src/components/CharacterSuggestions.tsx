@@ -1,35 +1,36 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "@/styles/CharacterSuggestions.module.css";
 
 interface CharacterSuggestionsProps {
   characterName: string;
   setCharacterName: (name: string) => void;
+  setInputManually: (name: string) => void; // Função para atualizar o input sem disparar o onChange
 }
 
-export default function CharacterSuggestions({ characterName, setCharacterName }: CharacterSuggestionsProps) {
+export default function CharacterSuggestions({ characterName, setCharacterName, setInputManually }: CharacterSuggestionsProps) {
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const isClicking = useRef(false);
 
   useEffect(() => {
+    if (!characterName.trim() || isClicking.current) {
+      setSuggestions([]);
+      return;
+    }
+
     const fetchCharacters = async () => {
-      if (characterName.length > 2) {
-        try {
-          console.log("🔍 Buscando todos os personagens...");
-          const response = await fetch("https://thronesapi-1.onrender.com/api/character-all/");
-          if (!response.ok) throw new Error("Erro ao buscar personagens");
+      try {
+        const response = await fetch("https://thronesapi-1.onrender.com/api/character-all/");
+        if (!response.ok) throw new Error("Erro ao buscar personagens");
 
-          const data = await response.json();
-          console.log("Lista de personagens recebida:", data);
+        const data = await response.json();
+        const filteredSuggestions = data
+          .filter((char: any) => char.nome.toLowerCase().startsWith(characterName.toLowerCase()))
+          .map((char: any) => char.nome);
 
-          const filteredSuggestions = data
-            .filter((char: any) => char.nome.toLowerCase().startsWith(characterName.toLowerCase()))
-            .map((char: any) => char.nome);
-
-          setSuggestions(filteredSuggestions);
-        } catch (error) {
-          console.error("Erro ao buscar sugestões:", error);
-          setSuggestions([]);
-        }
-      } else {
+        setSuggestions(filteredSuggestions);
+      } catch (error) {
+        console.error("Erro ao buscar sugestões:", error);
         setSuggestions([]);
       }
     };
@@ -37,17 +38,34 @@ export default function CharacterSuggestions({ characterName, setCharacterName }
     fetchCharacters();
   }, [characterName]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isClicking.current) {
+        isClicking.current = false;
+        return;
+      }
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setSuggestions([]);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
-    <div className={styles.suggestionsContainer}> 
+    <div ref={containerRef} className={styles.suggestionsContainer}>
       {suggestions.length > 0 && (
         <ul className={styles.suggestionsList}>
           {suggestions.map((suggestion, index) => (
             <li
               key={index}
               className={styles.suggestionItem}
-              onClick={() => {
-                setCharacterName(suggestion);
-                setSuggestions([]);
+              onMouseDown={(e) => {
+                e.preventDefault(); 
+                isClicking.current = true; 
+                setInputManually(suggestion); 
+                setSuggestions([]); 
               }}
             >
               {suggestion}

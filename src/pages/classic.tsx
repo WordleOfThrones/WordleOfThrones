@@ -21,7 +21,7 @@ export default function Classic() {
   const [nextGameTime, setNextGameTime] = useState<number | null>(null);
   const [countdown, setCountdown] = useState<string>("00:00:00");
 
-  // Busca o personagem atual da API
+
   useEffect(() => {
     const fetchSelectedCharacter = async () => {
       try {
@@ -79,8 +79,8 @@ export default function Classic() {
       setCountdown(`${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`);
     };
 
-    updateCountdown(); // Atualiza imediatamente ao carregar
-    const interval = setInterval(updateCountdown, 1000); // Atualiza a cada segundo
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
 
     return () => clearInterval(interval);
   }, [nextGameTime]);
@@ -99,7 +99,7 @@ export default function Classic() {
 
           <p className={styles.disabledText}>Ver estatísticas</p>
 
-          {/* Temporizador atualizado em tempo real */}
+       
           <p>Próximo jogo em: <span className={styles.countdown}>{countdown}</span></p>
 
           <hr />
@@ -134,6 +134,7 @@ export default function Classic() {
     if (selectedCharacter && characterName.toLowerCase().trim() === selectedCharacter.nome.toLowerCase().trim()) {
       setGameOver(true);
     }
+    setCharacterName("");
   }
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>): void {
@@ -142,143 +143,135 @@ export default function Classic() {
 
   const getBoxStyle = (field: string, value: string) => {
     if (!selectedCharacter || !selectedCharacter[field]) return `${styles.box}`;
-  
+
     return selectedCharacter[field].toLowerCase() === value.toLowerCase()
       ? `${styles.box} ${styles.boxGreen}`
       : `${styles.box} ${styles.boxRed}`;
   };
+  function setInputManually(name: string): void {
+    setCharacterName(name);
+  }
+
   return (
 
-      <>
-        <Header />
-        <div className={styles.pageContainer}>
-          <form onSubmit={handleSearch} className={styles.form}>
-            <div className={styles.inputWrapper}>
-              <input
-                type="text"
-                value={characterName}
-                onChange={handleInputChange}
-                placeholder="Digite o nome do personagem"
-                className={styles.inputField}
-              />
-              <CharacterSuggestions characterName={characterName} setCharacterName={setCharacterName} />
-            </div>
-            <button type="submit" className={styles.button}>Buscar</button>
-          </form>
-  
-          {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
-  
-          {characters.length > 0 && (
-            <div className={styles.container}>
-              <div className={styles.gridContainer}>
-                <div className={styles.column}>
-                  <div className={styles.columnLabel}>Personagem</div>
-                  {characters.map((character, index) => (
-                    <div key={index} className={styles.box}>
-                      {character.imagem ? (
-                        <img
-                          src={character.imagem}
-                          alt={character.nome || 'Personagem'}
-                          className={styles.characterImage}
-                        />
-                      ) : (
-                        <div className={styles.placeholder}>Sem Imagem</div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-  
-                <div className={styles.column}>
-                  <div className={styles.columnLabel}>Gênero</div>
-                  {characters.map((character, index) => (
-                    <div key={index} className={getBoxStyle('genero', character.genero)}>
-                      {character.genero}
-                    </div>
-                  ))}
-                </div>
-  
-                <div className={styles.column}>
-                  <div className={styles.columnLabel}>Série</div>
-                  {characters.map((character, index) => (
-                    <div key={index} className={getBoxStyle('serie', character.serie)}>
-                      {character.serie}
-                    </div>
-                  ))}
-                </div>
-  
-                <div className={styles.column}>
-                  <div className={styles.columnLabel}>Casa</div>
-                  {characters.map((character, index) => (
-                    <div key={index} className={getBoxStyle('casa', character.casa)}>
-                      {character.casa}
-                    </div>
-                  ))}
-                </div>
-  
-                <div className={styles.column}>
-                  <div className={styles.columnLabel}>Raça</div>
-                  {characters.map((character, index) => (
-                    <div key={index} className={getBoxStyle('raca', character.raca)}>
-                      {character.raca}
-                    </div>
-                  ))}
-                </div>
-  
-                <div className={styles.column}>
-                  <div className={styles.columnLabel}>Título</div>
-                  {characters.map((character, index) => (
-                    <div key={index} className={getBoxStyle('titulo', character.titulo)}>
-                      {character.titulo}
-                    </div>
-                  ))}
-                </div>
-  
-                <div className={styles.column}>
-                  <div className={styles.columnLabel}>Origem</div>
-                  {characters.map((character, index) => (
-                    <div key={index} className={getBoxStyle('origem', character.origem)}>
-                      {character.origem}
-                    </div>
-                  ))}
-                </div>
-  
-                <div className={styles.column}>
-                  <div className={styles.columnLabel}>Religião</div>
-                  {characters.map((character, index) => (
-                    <div key={index} className={getBoxStyle('religiao', character.religiao)}>
-                      {character.religiao}
-                    </div>
-                  ))}
-                </div>
-  
-                <div className={styles.column}>
-                  <div className={styles.columnLabel}>Primeira Aparição</div>
-                  {characters.map((character, index) => (
-                    <div key={index} className={getBoxStyle('primeiraAparicao', character.primeiraAparicao)}>
-                      {character.primeiraAparicao}
-                    </div>
-                  ))}
-                </div>
+    <>
+      <Header />
+      <div className={styles.pageContainer}>
+        <form onSubmit={handleSearch} className={styles.form}>
+          <div className={styles.inputWrapper}>
+            <input
+              type="text"
+              value={characterName}
+              onChange={handleInputChange}
+              placeholder="Digite o nome do personagem"
+              className={styles.inputField}
+            />
+            <CharacterSuggestions
+              characterName={characterName}
+              setCharacterName={setCharacterName}
+              setInputManually={setInputManually} 
+            />
+          </div>
+          <button type="submit" className={styles.button}>Buscar</button>
+        </form>
+        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+
+        {characters.length > 0 && (
+          <div className={styles.container}>
+            <div className={styles.gridContainer}>
+              <div className={styles.column}>
+                <div className={styles.columnLabel}>Personagem</div>
+                {characters.map((character, index) => (
+                  <div key={index} className={styles.box}>
+                    {character.imagem ? (
+                      <img
+                        src={character.imagem}
+                        alt={character.nome || 'Personagem'}
+                        className={styles.characterImage}
+                      />
+                    ) : (
+                      <div className={styles.placeholder}>Sem Imagem</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div className={styles.column}>
+                <div className={styles.columnLabel}>Gênero</div>
+                {characters.map((character, index) => (
+                  <div key={index} className={getBoxStyle('genero', character.genero)}>
+                    {character.genero}
+                  </div>
+                ))}
+              </div>
+
+              <div className={styles.column}>
+                <div className={styles.columnLabel}>Série</div>
+                {characters.map((character, index) => (
+                  <div key={index} className={getBoxStyle('serie', character.serie)}>
+                    {character.serie}
+                  </div>
+                ))}
+              </div>
+
+              <div className={styles.column}>
+                <div className={styles.columnLabel}>Casa</div>
+                {characters.map((character, index) => (
+                  <div key={index} className={getBoxStyle('casa', character.casa)}>
+                    {character.casa}
+                  </div>
+                ))}
+              </div>
+
+              <div className={styles.column}>
+                <div className={styles.columnLabel}>Raça</div>
+                {characters.map((character, index) => (
+                  <div key={index} className={getBoxStyle('raca', character.raca)}>
+                    {character.raca}
+                  </div>
+                ))}
+              </div>
+
+
+              <div className={styles.column}>
+                <div className={styles.columnLabel}>Origem</div>
+                {characters.map((character, index) => (
+                  <div key={index} className={getBoxStyle('origem', character.origem)}>
+                    {character.origem}
+                  </div>
+                ))}
+              </div>
+
+              <div className={styles.column}>
+                <div className={styles.columnLabel}>Religião</div>
+                {characters.map((character, index) => (
+                  <div key={index} className={getBoxStyle('religiao', character.religiao)}>
+                    {character.religiao}
+                  </div>
+                ))}
+              </div>
+
+              <div className={styles.column}>
+                <div className={styles.columnLabel}>Primeira Aparição</div>
+                {characters.map((character, index) => (
+                  <div key={index} className={getBoxStyle('primeiraAparicao', character.primeiraAparicao)}>
+                    {character.primeiraAparicao}
+                  </div>
+                ))}
               </div>
             </div>
-          )}
-  
-          {gameOver && selectedCharacter && (
-            <VictoryModal 
-              character={selectedCharacter} 
-              attempts={attempts} 
-              onClose={() => setGameOver(false)} 
-            />
-          )}
-  
-          {/* Exibição do temporizador real no jogo
-          {nextGameTime && (
-            <div className={styles.timerContainer}>
-              <p>⏳ Próximo personagem disponível em: <span className={styles.countdown}>{countdown}</span></p>
-            </div>
-          )} */}
-        </div>
-      </>
+          </div>
+        )}
+
+        {gameOver && selectedCharacter && (
+          <VictoryModal
+            character={selectedCharacter}
+            attempts={attempts}
+            onClose={() => setGameOver(false)}
+          />
+        )}
+      </div>
+    </>
   );
-  
+
 }
