@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useUpload } from '@/hooks/useUpload';
-import styles from '@/styles/CharacterForm.module.css';
+import styles from '@/styles/CharacterRegistration/CharacterForm.module.css';
 
 export default function CharacterForm() {
   const [image, setImage] = useState<File | null>(null);

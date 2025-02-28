@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import styles from "@/styles/CharacterSuggestions.module.css";
+import styles from "@/styles/GameFeatures/CharacterSuggestions.module.css";
 
 interface CharacterSuggestionsProps {
   characterName: string;

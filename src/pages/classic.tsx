@@ -1,9 +1,9 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import useFetchCharacter from '@/hooks/useFetchCharacter';
-import styles from '@/styles/Classic.module.css';
-import CharacterSuggestions from "@/components/CharacterSuggestions";
+import styles from '@/styles/GameMode/Classic.module.css';
+import CharacterSuggestions from "@/components/GameFeatures/CharacterSuggestions";
 import Header from '@/components/Header';
-import VictoryModal from '@/components/VictoryModal';
+import VictoryModal from '@/components/GameFeatures/VictoryModal';
 
 export default function Classic() {
   const {

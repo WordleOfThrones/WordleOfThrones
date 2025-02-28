@@ -1,5 +1,5 @@
-import CharacterForm from "@/components/CharacterForm"
-import CharacterList from "@/components/CharacterList"
+import CharacterForm from "@/components/CharacterRegistration/CharacterForm"
+import CharacterList from "@/components/CharacterRegistration/CharacterList"
 
 export default function dataGame(){
   return (

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "../styles/RegisterPage.module.css";
+import styles from "../styles/UserAccess/RegisterPage.module.css";
 import Logo from "@/components/Header/Logo"; 
 import Link from "next/link";
 

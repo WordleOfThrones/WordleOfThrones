@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import styles from '@/styles/VictoryModal.module.css';
+import styles from "@/styles/GameFeatures/VictoryModal.module.css";
 import Image from 'next/image';
 import Link from 'next/link';
 
