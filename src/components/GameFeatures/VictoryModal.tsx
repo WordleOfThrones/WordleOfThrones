@@ -40,7 +40,7 @@ export default function VictoryModal({ character, attempts, nextGameTime, onClos
 
  
   const characterImage = character?.imagem || "/image/botao.png";
-  const characterDescription = character?.serie || "Descrição não disponível";
+  const characterDescription = character?.titulo || "Descrição não disponível";
 
   return (
     <div className={styles.modalOverlay}>
