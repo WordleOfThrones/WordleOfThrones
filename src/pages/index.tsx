@@ -13,8 +13,9 @@ export default function Home() {
 
       <div className="textContainer">
         <p>Adivinhe diariamente um personagem de <br />
-          <span className="series">Game of Thrones</span> ou 
-          <span>House of the Dragon</span>
+          <span className="series">Game of Thrones</span> 
+          <span className="separator"> ou </span>
+          <span className='seriess'>House of the Dragon</span>
         </p>
       </div>
 

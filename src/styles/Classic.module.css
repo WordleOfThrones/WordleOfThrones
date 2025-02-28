@@ -41,7 +41,7 @@
 
 .gridContainer {
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   gap: 10px;
   width: 100%;
   max-width: 1200px;
@@ -94,7 +94,6 @@
   margin: 5px 0;
   text-align: center;
   font-size: 0.9rem;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
 }
 
@@ -104,7 +103,7 @@
 
 .characterImage {
   width: 60px;
-  height: 60px;
+  height: 70px;
   object-fit: cover;
   display: block;
   margin: 0 auto;

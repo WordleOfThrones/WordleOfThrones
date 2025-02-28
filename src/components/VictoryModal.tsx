@@ -45,7 +45,7 @@ export default function VictoryModal({ character, attempts, nextGameTime, onClos
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <h2>🎉 PARABÉNS, VOCÊ ACERTOU!! 🎉</h2>
+        <h2> PARABÉNS, VOCÊ ACERTOU!!</h2>
         <p><strong>Número de tentativas:</strong> {attempts}</p>
 
         <img src={characterImage} alt={character.nome} className={styles.characterImage} />

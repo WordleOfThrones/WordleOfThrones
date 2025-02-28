@@ -2,14 +2,19 @@
 
 
 .header {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 20px;
+  padding: 1rem 2rem;
   color: #fff;
-  height: 80px;
+  height: 5rem;
+  z-index: 1000;
 }
+
 
 .configButtonContainer {
   position: absolute;
