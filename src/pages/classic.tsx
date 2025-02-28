@@ -3,8 +3,8 @@ import useFetchCharacter from '@/hooks/useFetchCharacter';
 import styles from '@/styles/Classic.module.css';
 import CharacterSuggestions from "@/components/CharacterSuggestions";
 import Header from '@/components/Header';
-import Image from 'next/image';
-import Link from 'next/link';
+import VictoryModal from '@/components/VictoryModal';
+
 export default function Classic() {
   const {
     characterName,
@@ -19,7 +19,7 @@ export default function Classic() {
   const [gameOver, setGameOver] = useState(false);
   const [attempts, setAttempts] = useState(0);
   const [nextGameTime, setNextGameTime] = useState<number | null>(null);
-  const [countdown, setCountdown] = useState<string>("00:00:00");
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
 
   useEffect(() => {
@@ -35,10 +35,10 @@ export default function Classic() {
         // Define o tempo do próximo personagem baseado na API
         const now = new Date();
         const resetTime = new Date(now);
-        resetTime.setHours(0, 0, 0, 0); // Reseta para meia-noite do dia atual
-        resetTime.setDate(resetTime.getDate() + 1); // Adiciona um dia para garantir a troca do personagem
+        resetTime.setHours(0, 0, 0, 0); 
+        resetTime.setDate(resetTime.getDate() + 1);
 
-        const nextTime = resetTime.getTime(); // Obtém timestamp da meia-noite do próximo dia
+        const nextTime = resetTime.getTime(); 
         setNextGameTime(nextTime);
         localStorage.setItem("nextGameTime", nextTime.toString());
       } catch (error) {
@@ -52,91 +52,45 @@ export default function Classic() {
   // Atualiza a lista de personagens buscados
   useEffect(() => {
     if (characterData && characterData.imagem) {
-      console.log("🔍 Personagem Buscado:", characterData);
-      setCharacters((prevCharacters) => [characterData, ...prevCharacters]);
+      console.log("Personagem Buscado:", characterData);
+
+      setCharacters((prevCharacters) => {
+        if (!prevCharacters.some((char) => char.nome === characterData.nome)) {
+          return [characterData, ...prevCharacters];
+        }
+        return prevCharacters;
+      });
     }
   }, [characterData]);
 
-  // Atualiza o temporizador em tempo real
-  useEffect(() => {
-    if (!nextGameTime) return;
-
-    const updateCountdown = () => {
-      const now = Date.now();
-      const remainingTime = nextGameTime - now;
-
-      if (remainingTime <= 0) {
-        setCountdown("00:00:00");
-        localStorage.removeItem("nextGameTime");
-        setNextGameTime(null);
-        return;
-      }
-
-      const hours = Math.floor(remainingTime / (1000 * 60 * 60));
-      const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
-
-      setCountdown(`${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`);
-    };
-
-    updateCountdown();
-    const interval = setInterval(updateCountdown, 1000);
-
-    return () => clearInterval(interval);
-  }, [nextGameTime]);
-
-  // Modal de Vitória
-  const VictoryModal = ({ character, attempts, onClose }: { character: any; attempts: number; onClose: () => void }) => {
-    return (
-      <div className={styles.modalOverlay}>
-        <div className={styles.modalContent}>
-          <h2> PARABÉNS, VOCÊ ACERTOU!!</h2>
-          <p><strong>número de tentativas:</strong> {attempts}</p>
-
-          <img src={character.imagem} alt={character.nome} className={styles.characterImage} />
-          <blockquote>"{character.serie || 'PRECISO DA ROTA DE DESCRICAAAO'}"</blockquote>
-          <p><strong>{character.nome}</strong></p>
-
-          <p className={styles.disabledText}>Ver estatísticas</p>
-
-       
-          <p>Próximo jogo em: <span className={styles.countdown}>{countdown}</span></p>
-
-          <hr />
-
-          <p><strong>Outros modos:</strong></p>
-          <div className={styles.iconContainer}>
-            <Link href="/imagem">
-              <Image src="/images/perg.png" alt="Modo Imagem" width={50} height={50} className={styles.icon} />
-            </Link>
-
-            <Link href="/descricao">
-              <Image src="/images/eye.png" alt="Modo Descrição" width={50} height={50} className={styles.icon} />
-            </Link>
-          </div>
-
-          <button onClick={onClose} className={styles.closeButton}>Fechar</button>
-        </div>
-      </div>
-    );
-  };
-
   function handleSearch(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
+  
     if (characterName.trim() === "") {
       alert("Por favor, digite o nome de um personagem.");
       return;
     }
+  
+    if (characters.some((char) => char.nome.toLowerCase() === characterName.toLowerCase().trim())) {
+      alert("Este personagem já foi buscado!");
+      return;
+    }
+  
+    setAttempts((prev) => prev + 1); 
+  
     handleSubmit(event);
-    setAttempts(attempts + 1);
-
-    // Verifica se o nome digitado é igual ao personagem sorteado
-    if (selectedCharacter && characterName.toLowerCase().trim() === selectedCharacter.nome.toLowerCase().trim()) {
-      setGameOver(true);
+  
+    if (selectedCharacter) {
+      console.log("🔍 Personagem Sorteado:", selectedCharacter.nome);
+      console.log("✏️ Nome Digitado:", characterName);
+  
+      if (characterName.toLowerCase().trim() === selectedCharacter.nome.toLowerCase().trim()) {
+        console.log("🎉 Acertou! Atualizando gameOver para true");
+        setGameOver(true);
+      }
     }
     setCharacterName("");
   }
-
   function handleInputChange(event: ChangeEvent<HTMLInputElement>): void {
     setCharacterName(event.target.value);
   }
@@ -144,14 +98,28 @@ export default function Classic() {
   const getBoxStyle = (field: string, value: string) => {
     if (!selectedCharacter || !selectedCharacter[field]) return `${styles.box}`;
 
-    return selectedCharacter[field].toLowerCase() === value.toLowerCase()
+    const correctValue = selectedCharacter[field].trim().toLowerCase();
+    const inputValue = value.trim().toLowerCase();
+
+    return correctValue === inputValue
       ? `${styles.box} ${styles.boxGreen}`
       : `${styles.box} ${styles.boxRed}`;
   };
+
   function setInputManually(name: string): void {
     setCharacterName(name);
   }
 
+  useEffect(() => {
+    if (formSubmitted && selectedCharacter && characterName.toLowerCase().trim() === selectedCharacter.nome.toLowerCase().trim()) {
+      console.log(" Acertou! Atualizando gameOver para true");
+      setGameOver(true);
+      setCharacters((prevCharacters) => {
+        const updatedList = prevCharacters.filter((char) => char.nome !== selectedCharacter.nome);
+        return [selectedCharacter, ...updatedList];
+      });
+    }
+  }, [formSubmitted, selectedCharacter, characterName]);
   return (
 
     <>
@@ -169,7 +137,7 @@ export default function Classic() {
             <CharacterSuggestions
               characterName={characterName}
               setCharacterName={setCharacterName}
-              setInputManually={setInputManually} 
+              setInputManually={setInputManually}
             />
           </div>
           <button type="submit" className={styles.button}>Buscar</button>
@@ -232,7 +200,6 @@ export default function Classic() {
                 ))}
               </div>
 
-
               <div className={styles.column}>
                 <div className={styles.columnLabel}>Origem</div>
                 {characters.map((character, index) => (
@@ -267,9 +234,11 @@ export default function Classic() {
           <VictoryModal
             character={selectedCharacter}
             attempts={attempts}
+            nextGameTime={nextGameTime} 
             onClose={() => setGameOver(false)}
           />
         )}
+
       </div>
     </>
   );
