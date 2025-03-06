@@ -101,10 +101,21 @@ export default function Classic() {
     const correctValue = selectedCharacter[field].trim().toLowerCase();
     const inputValue = value.trim().toLowerCase();
 
-    return correctValue === inputValue
-      ? `${styles.box} ${styles.boxGreen}`
-      : `${styles.box} ${styles.boxRed}`;
-  };
+  if (correctValue === inputValue) {
+    return `${styles.box} ${styles.boxGreen}`;
+  }
+
+  const correctParts = correctValue.split("/").map((part: string) => part.trim());
+  const inputParts = inputValue.split("/").map(part => part.trim());
+
+  const hasPartialMatch = inputParts.some(part => correctParts.includes(part));
+
+  if (hasPartialMatch) {
+    return `${styles.box} ${styles.boxYellow}`;
+  }
+
+  return `${styles.box} ${styles.boxRed}`;
+};
 
   function setInputManually(name: string): void {
     setCharacterName(name);
