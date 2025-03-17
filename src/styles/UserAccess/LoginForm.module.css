@@ -1,123 +1,126 @@
-@font-face {
-    font-family: "GameOfThrones";
-    src: url("/static/fonts/GameOfThrones.woff") format("woff"),
-         url("/static/fonts/GameOfThrones.TTF") format("truetype");
-    font-weight: normal;
-    font-style: normal;
-  }
-  
-  .pageContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-image: url("/images/background.jpg");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
-  
-  .logoContainer {
-    position: absolute;
-    top: 20px;
-    left: 680px;
-    z-index: 10;
-    cursor: pointer;
-  }
-  
-  .loginForm {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 450px;
-    padding: 25px;
-    background-color: #1a1a1d;
-    border: 2px solid #bfa181;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
-  }
-  
-  .loginForm h2 {
-    font-family: "GameOfThrones", serif;
-    font-size: 28px;
-    color: #bfa181;
-    text-transform: uppercase;
-    margin-bottom: 15px;
-    text-align: center;
-  }
-  
-  .loginForm input {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    background-color: #292929;
-    border: 1px solid #bfa181;
-    border-radius: 5px;
-    color: #e0e0e0;
-    font-size: 11px;
-    font-family: "GameOfThrones", serif;
-    transition: border 0.3s ease-in-out;
-  }
-  
-  .loginForm input::placeholder {
-    color: #bfa181;
-    font-size: 14px;
-    text-transform: uppercase;
-  }
-  
-  .loginForm input:focus {
-    border-color: #e0c097;
-    outline: none;
-    box-shadow: 0 0 8px rgba(191, 161, 129, 0.7);
-  }
-  
-  .loginForm button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 15px;
-    background-color: #bfa181;
-    border: none;
-    border-radius: 5px;
-    color: #1a1a1d;
-    font-size: 14px;
-    font-family: "GameOfThrones", serif;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.3s ease-in-out;
-  }
-  
-  .loginForm button:hover {
-    background-color: #e0c097;
-  }
-  
-  .redirectText {
-    margin-top: 20px;
-    font-size: 14px;
-    color: #e0e0e0;
-  }
-  
-  .link {
-    color: #bfa181;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  .link:hover {
-    text-decoration: underline;
-  }
+/* Importação das novas fontes */
+@import url('https://fonts.googleapis.com/css2?family=Hahmlet:wght@200;400;700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
+
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-image: url("/images/background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.logoContainer {
+  position: absolute;
+  top: 20px;
+  left: 680px;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 450px;
+  padding: 25px;
+  background-color: #1a1a1d;
+  border: 2px solid #bfa181;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* Título do formulário */
+.loginForm h2 {
+  font-family: "Hahmlet", serif; /* Nova fonte principal */
+  font-size: 28px;
+  color: #bfa181;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* Campos de entrada */
+.loginForm input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  background-color: #292929;
+  border: 1px solid #bfa181;
+  border-radius: 5px;
+  color: #e0e0e0;
+  font-size: 11px;
+  font-family: "Old Standard TT", serif; /* Nova fonte para campos de entrada */
+  transition: border 0.3s ease-in-out, font-family 0.3s ease-in-out;
+}
+
+.loginForm input::placeholder {
+  color: #bfa181;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-family: "Old Standard TT", serif; /* Mantém a nova fonte no placeholder */
+}
+
+/* Muda a fonte para Roboto quando o campo está em foco */
+.loginForm input:focus {
+  border-color: #e0c097;
+  outline: none;
+  box-shadow: 0 0 8px rgba(191, 161, 129, 0.7);
+  font-family: "Roboto", sans-serif; /* Altera para Roboto ao focar */
+}
+
+/* Botão de login */
+.loginForm button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background-color: #bfa181;
+  border: none;
+  border-radius: 5px;
+  color: #1a1a1d;
+  font-size: 14px;
+  font-family: "Hahmlet", serif; /* Nova fonte para o botão */
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.loginForm button:hover {
+  background-color: #e0c097;
+}
+
+.redirectText {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #e0e0e0;
+  font-family: "Old Standard TT", serif; /* Nova fonte para texto de redirecionamento */
+}
+
+.link {
+  color: #bfa181;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: "Hahmlet", serif; /* Nova fonte para links */
+}
+
+.link:hover {
+  text-decoration: underline;
+}
 
 .loginError {
-font-family: arial, sans-serif;
-color: #ff0000;
-font-size: 14px;
-margin-top: 10px;
+  font-family: "Old Standard TT", serif; /* Nova fonte para mensagens de erro */
+  color: #ff0000;
+  font-size: 14px;
+  margin-top: 10px;
 }
 
 .loginSuccess {
-Margin-top: 10px;
-font-family: arial, sans-serif;
-color: #1f7a1f;
-  }
+  margin-top: 10px;
+  font-family: "Old Standard TT", serif; /* Nova fonte para mensagens de sucesso */
+  color: #1f7a1f;
+}

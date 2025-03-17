@@ -1,10 +1,4 @@
-@font-face {
-  font-family: "GameOfThrones";
-  src: url("/static/fonts/GameOfThrones.woff") format("woff"),
-       url("/static/fonts/GameOfThrones.TTF") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
+@import url('https://fonts.googleapis.com/css2?family=Hahmlet:wght@200;400;700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
 
 .registerPageContainer {
   display: flex;
@@ -13,7 +7,6 @@
   justify-content: center;
   min-height: 200vh; 
   background-color: #121214; 
-
 }
 
 .pageContainer {
@@ -51,7 +44,7 @@
 }
 
 .registerForm h2 {
-  font-family: "GameOfThrones", serif;
+  font-family: "Hahmlet", serif; 
   font-size: 24px;
   color: #bfa181;
   text-transform: uppercase;
@@ -59,7 +52,7 @@
   text-align: center;
 }
 
-/* Campos de entrada */
+
 .registerForm input {
   width: 100%;
   padding: 12px;
@@ -68,21 +61,24 @@
   border: 1px solid #bfa181;
   border-radius: 5px;
   color: #e0e0e0;
-  font-size: 11px;
-  font-family: "GameOfThrones", serif;
-  transition: border 0.3s ease-in-out;
+  font-size: 12px;
+  font-family: "Old Standard TT", serif; 
+  transition: border 0.3s ease-in-out, font-family 0.3s ease-in-out;
 }
 
 .registerForm input::placeholder {
   color: #bfa181;
-  font-size: 14px;
+  font-size: 16px;
   text-transform: uppercase;
+  font-family: "Old Standard TT", serif; 
 }
 
 .registerForm input:focus {
   border-color: #e0c097;
   outline: none;
   box-shadow: 0 0 8px rgba(191, 161, 129, 0.7);
+  font-family: "Roboto", sans-serif; 
+  font-size: 16px;
 }
 
 /* Botão de cadastro */
@@ -95,7 +91,7 @@
   border-radius: 5px;
   color: #1a1a1d;
   font-size: 16px;
-  font-family: "GameOfThrones", serif;
+  font-family: "Hahmlet", serif; /* Nova fonte para o botão */
   text-transform: uppercase;
   cursor: pointer;
   transition: background 0.3s ease-in-out;
@@ -112,7 +108,7 @@
 
 /* Mensagens de erro e sucesso */
 .error, .success {
-  font-family: arial, sans-serif;
+  font-family: "Old Standard TT", serif; /* Nova fonte para mensagens */
   font-size: 12px;
   text-transform: uppercase;
   margin-top: 10px;
@@ -131,12 +127,14 @@
   margin-top: 16px;
   font-size: 14px;
   color: #e0e0e0;
+  font-family: "Old Standard TT", serif; 
 }
 
 .link {
   color: #bfa181;
   cursor: pointer;
   font-weight: bold;
+  font-family: "Hahmlet", serif; /* Nova fonte para links */
 }
 
 .link:hover {
