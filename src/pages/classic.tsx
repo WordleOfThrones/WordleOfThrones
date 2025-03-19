@@ -35,10 +35,10 @@ export default function Classic() {
         // Define o tempo do próximo personagem baseado na API
         const now = new Date();
         const resetTime = new Date(now);
-        resetTime.setHours(0, 0, 0, 0); 
+        resetTime.setHours(0, 0, 0, 0);
         resetTime.setDate(resetTime.getDate() + 1);
 
-        const nextTime = resetTime.getTime(); 
+        const nextTime = resetTime.getTime();
         setNextGameTime(nextTime);
         localStorage.setItem("nextGameTime", nextTime.toString());
       } catch (error) {
@@ -65,25 +65,22 @@ export default function Classic() {
 
   function handleSearch(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
-  
+
     if (characterName.trim() === "") {
       alert("Por favor, digite o nome de um personagem.");
       return;
     }
-  
+
     if (characters.some((char) => char.nome.toLowerCase() === characterName.toLowerCase().trim())) {
       alert("Este personagem já foi buscado!");
       return;
     }
-  
-    setAttempts((prev) => prev + 1); 
-  
+
+    setAttempts((prev) => prev + 1);
+
     handleSubmit(event);
-  
+
     if (selectedCharacter) {
-      console.log("🔍 Personagem Sorteado:", selectedCharacter.nome);
-      console.log("✏️ Nome Digitado:", characterName);
-  
       if (characterName.toLowerCase().trim() === selectedCharacter.nome.toLowerCase().trim()) {
         console.log("🎉 Acertou! Atualizando gameOver para true");
         setGameOver(true);
@@ -95,27 +92,24 @@ export default function Classic() {
     setCharacterName(event.target.value);
   }
 
+  const normalizeText = (text: string): string =>
+    text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
+
   const getBoxStyle = (field: string, value: string) => {
     if (!selectedCharacter || !selectedCharacter[field]) return `${styles.box}`;
-
-    const correctValue = selectedCharacter[field].trim().toLowerCase();
-    const inputValue = value.trim().toLowerCase();
-
-  if (correctValue === inputValue) {
-    return `${styles.box} ${styles.boxGreen}`;
-  }
-
-  const correctParts = correctValue.split("/").map((part: string) => part.trim());
-  const inputParts = inputValue.split("/").map(part => part.trim());
-
-  const hasPartialMatch = inputParts.some(part => correctParts.includes(part));
-
-  if (hasPartialMatch) {
-    return `${styles.box} ${styles.boxYellow}`;
-  }
-
-  return `${styles.box} ${styles.boxRed}`;
-};
+    const correctValue = normalizeText(selectedCharacter[field]);
+    const inputValue = normalizeText(value);
+    if (correctValue === inputValue) {
+      return `${styles.box} ${styles.boxGreen}`;
+    }
+    const correctWords = new Set(correctValue.split(/[\s/,-]+/));
+    const inputWords = new Set(inputValue.split(/[\s/,-]+/));
+    const hasPartialMatch = Array.from(inputWords).some((word) => correctWords.has(word));
+    if (hasPartialMatch) {
+      return `${styles.box} ${styles.boxYellow}`;
+    }
+    return `${styles.box} ${styles.boxRed}`;
+  };
 
   function setInputManually(name: string): void {
     setCharacterName(name);
@@ -245,7 +239,7 @@ export default function Classic() {
           <VictoryModal
             character={selectedCharacter}
             attempts={attempts}
-            nextGameTime={nextGameTime} 
+            nextGameTime={nextGameTime}
             onClose={() => setGameOver(false)}
           />
         )}
