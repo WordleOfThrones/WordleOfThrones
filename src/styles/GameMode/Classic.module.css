@@ -5,38 +5,52 @@
   padding: 20px;
   min-height: 100vh;
   align-items: center;
+  height: 100vh;
 }
 
-.form {
+
+.inputContainer {
+  position: sticky; 
+  top: 0; 
+  z-index: 999;
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 8% 0;
-  flex-wrap: wrap;
-}
-
-.inputField {
-  padding: 10px;
-  font-size: 1rem;
+  align-items: center;
   width: 300px;
-  border: 1px solid #ccc;
+  margin: 0 auto;
+  border: 2px solid #000000; /* Borda dourada */
   border-radius: 5px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
 }
 
-.button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  background-color: #4CAF50;
-  color: white;
+/* Estilização do input */
+.inputField {
+  flex: 1;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  outline: none;
+  background: transparent; /* Fundo transparente para exibir o fundo do container */
+  color: #000000;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 3px 0 0 3px;
 }
 
-.button:hover {
-  background-color: #45a049;
+
+/* Botão de busca */
+.searchButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ícone dentro do botão */
+.searchButton img {
+  width: 20px;
+  height: 20px;
+  color: #000000;
 }
 
 .gridContainer {
@@ -143,6 +157,90 @@
 .boxYellow {
   background-color: #FFA000;
   border-color: #FFC107;
+
+}
+
+.searchBox {
+  background-color: black;
+  color: #ffcc00;
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #ffcc00;
+  border-radius: 10px;
+  max-width: 600px;
+  margin: 20px auto;
+  margin-top: 25%;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.searchForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inputContainer {
+  position: relative; 
+  display: flex;
+  align-items: center;
+  width: 350px; /* Ajuste a largura conforme quiser */
+  margin: 0 auto;
+}
+
+.inputField {
+ 
+    flex: 1; 
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    border-radius: 5px 0 0 5px; /* Arredonda apenas a esquerda */
+  
   
 }
 
+.searchButton {
+  background: none;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.searchButton img {
+  width: 25px;
+  height: 30px;
+}
+
+.tableContainer {
+  flex: 1; /* Ocupa o restante da tela */
+  overflow-y: auto; /* Habilita o scroll vertical */
+  padding: 20px; /* Espaçamento ao redor da tabela */
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 10px;
+  /* etc... */
+}
+
+.tableContainer {
+  flex: 1;
+  overflow-y: scroll; /* ou auto, conforme sua necessidade */
+
+  /* Remove a barra de rolagem no IE e Edge antigos */
+  -ms-overflow-style: none; 
+
+  /* Remove a barra de rolagem no Firefox */
+  scrollbar-width: none;
+}
+
+/* Remove a barra de rolagem no Chrome, Safari e Opera */
+.tableContainer::-webkit-scrollbar {
+  display: none;
+}

@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect, useRef, ChangeEvent, FormEvent } from 'react';
 import useFetchCharacter from '@/hooks/useFetchCharacter';
 import styles from '@/styles/GameMode/Classic.module.css';
 import CharacterSuggestions from "@/components/GameFeatures/CharacterSuggestions";
@@ -21,6 +21,8 @@ export default function Classic() {
   const [nextGameTime, setNextGameTime] = useState<number | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
+  // 🔹 REF para o formulário
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     const fetchSelectedCharacter = async () => {
@@ -88,35 +90,68 @@ export default function Classic() {
     }
     setCharacterName("");
   }
+
   function handleInputChange(event: ChangeEvent<HTMLInputElement>): void {
     setCharacterName(event.target.value);
+  }
+
+  // 🔹 Função chamada ao clicar numa sugestão
+  function handleSuggestionClick(name: string) {
+    setCharacterName(name);
+    // Envia o formulário automaticamente
+    formRef.current?.requestSubmit();
   }
 
   const normalizeText = (text: string): string =>
     text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
 
   const getBoxStyle = (field: string, value: string) => {
-    if (!selectedCharacter || !selectedCharacter[field]) return `${styles.box}`;
+    if (!selectedCharacter || !selectedCharacter[field]) {
+      return `${styles.box}`;
+    }
+  
     const correctValue = normalizeText(selectedCharacter[field]);
     const inputValue = normalizeText(value);
+
+    // Verde se for igual
     if (correctValue === inputValue) {
       return `${styles.box} ${styles.boxGreen}`;
     }
-    const correctWords = new Set(correctValue.split(/[\s/,-]+/));
-    const inputWords = new Set(inputValue.split(/[\s/,-]+/));
-    const hasPartialMatch = Array.from(inputWords).some((word) => correctWords.has(word));
-    if (hasPartialMatch) {
+
+    // Verifica parcial se houver "/"
+    const correctParts = new Set(
+      correctValue.split("/").map((part) => part.trim()).filter(Boolean)
+    );
+    const inputParts = new Set(
+      inputValue.split("/").map((part) => part.trim()).filter(Boolean)
+    );
+
+    let hasIntersection = false;
+    for (const part of Array.from(inputParts)) {
+      if (correctParts.has(part)) {
+        hasIntersection = true;
+        break;
+      }
+    }
+
+    if (hasIntersection) {
       return `${styles.box} ${styles.boxYellow}`;
     }
+
     return `${styles.box} ${styles.boxRed}`;
   };
 
+  // Mantém a lógica, caso use para algo extra
   function setInputManually(name: string): void {
     setCharacterName(name);
   }
 
   useEffect(() => {
-    if (formSubmitted && selectedCharacter && characterName.toLowerCase().trim() === selectedCharacter.nome.toLowerCase().trim()) {
+    if (
+      formSubmitted &&
+      selectedCharacter &&
+      characterName.toLowerCase().trim() === selectedCharacter.nome.toLowerCase().trim()
+    ) {
       console.log(" Acertou! Atualizando gameOver para true");
       setGameOver(true);
       setCharacters((prevCharacters) => {
@@ -126,32 +161,42 @@ export default function Classic() {
     }
   }, [formSubmitted, selectedCharacter, characterName]);
   return (
+<div className={styles.pageContainer}>
+  {/* Área fixa (sticky) com o Header e o quadro de busca */}
+  <div className={styles.searchContainer}>
+    <Header />
+    <div className={styles.searchBox}>
+      <h2 className={styles.title}>ADIVINHE DIARIAMENTE UM PERSONAGEM</h2>
+      <form onSubmit={handleSearch} className={styles.searchForm}>
+        <div className={styles.inputContainer}>
+          <input
+            type="text"
+            value={characterName}
+            onChange={handleInputChange}
+            placeholder="Escreva o nome de um personagem..."
+            className={styles.inputField}
+          />
+          <button type="submit" className={styles.searchButton}>
+            <img src="/paper-plane-solid.svg" alt="Enviar" />
+          </button>
 
-    <>
-      <Header />
-      <div className={styles.pageContainer}>
-        <form onSubmit={handleSearch} className={styles.form}>
-          <div className={styles.inputWrapper}>
-            <input
-              type="text"
-              value={characterName}
-              onChange={handleInputChange}
-              placeholder="Digite o nome do personagem"
-              className={styles.inputField}
-            />
-            <CharacterSuggestions
-              characterName={characterName}
-              setCharacterName={setCharacterName}
-              setInputManually={setInputManually}
-            />
-          </div>
-          <button type="submit" className={styles.button}>Buscar</button>
-        </form>
+          {/* As sugestões precisam ficar dentro do mesmo container */}
+          <CharacterSuggestions
+            characterName={characterName}
+            setCharacterName={setCharacterName}
+            setInputManually={setInputManually}
+          />
+        </div>
         {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+      </form>
+    </div>
+  </div>
 
-        {characters.length > 0 && (
-          <div className={styles.container}>
-            <div className={styles.gridContainer}>
+  {/* Área rolável (só a tabela rola) */}
+  <div className={styles.tableContainer}>
+    {/* Renderização dos personagens */}
+    {characters.length > 0 && (
+      <div className={styles.gridContainer}>
               <div className={styles.column}>
                 <div className={styles.columnLabel}>Personagem</div>
                 {characters.map((character, index) => (
@@ -232,20 +277,19 @@ export default function Classic() {
                 ))}
               </div>
             </div>
-          </div>
-        )}
+    )}
 
-        {gameOver && selectedCharacter && (
-          <VictoryModal
-            character={selectedCharacter}
-            attempts={attempts}
-            nextGameTime={nextGameTime}
-            onClose={() => setGameOver(false)}
-          />
-        )}
+    {gameOver && selectedCharacter && (
+      <VictoryModal
+        character={selectedCharacter}
+        attempts={attempts}
+        nextGameTime={nextGameTime}
+        onClose={() => setGameOver(false)}
+      />
+    )}
+  </div>
+</div>
 
-      </div>
-    </>
   );
 
 }

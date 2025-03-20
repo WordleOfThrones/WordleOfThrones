@@ -1,33 +1,36 @@
 .suggestionsContainer {
-    position: relative; 
-    width: 100%;
-  }
+  position: absolute;
+  top: 100%; 
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
   
-  .suggestionsList {
-    background: #2c2c2c;
-    color: white;
-    border: 1px solid #444;
-    max-height: 200px;
-    overflow-y: auto;
-    position: absolute;
-    width: 100%;
-    top: 100%; 
-    left: 0;
-    border-radius: 5px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-    z-index: 1000; 
-  }
-  
-  .suggestionItem {
-    padding: 10px;
-    cursor: pointer;
-    transition: background 0.3s, color 0.3s;
-    font-size: 16px;
-    text-align: left;
-  }
-  
-  .suggestionItem:hover {
-    background: #444;
-    color: #f1c40f; 
-  }
-  
+/* Estilização da rolagem somente na .suggestionsList */
+.suggestionsList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: #1c1c1c;
+  color: #fff; 
+  border-radius: 0 0 5px 5px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.suggestionsList::-webkit-scrollbar {
+  width: 6px;         
+  background-color: #2c2c2c; 
+} 
+.suggestionItem {
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+  font-size: 16px;
+  text-align: left;
+}
+
+.suggestionItem:hover {
+  background: #444;
+  color: #f1c40f;
+}
