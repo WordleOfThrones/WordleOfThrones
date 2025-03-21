@@ -4,9 +4,9 @@ import styles from "@/styles/GameFeatures/CharacterSuggestions.module.css";
 interface CharacterSuggestionsProps {
   characterName: string;
   setCharacterName: (name: string) => void;
-  setInputManually: (name: string) => void; // Função para atualizar o input sem disparar o onChange
+  setInputManually: (name: string) => void;
+  onSuggestionClick?: (name: string) => void; 
 }
-
 export default function CharacterSuggestions({ characterName, setCharacterName, setInputManually }: CharacterSuggestionsProps) {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const containerRef = useRef<HTMLDivElement | null>(null);
