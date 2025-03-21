@@ -6,7 +6,6 @@ import Header from "@/components/Header";
 import VictoryModal from "@/components/GameFeatures/VictoryModal";
 
 export default function Descricao() {
-  // 1) Usa o hook com o 'mode' que você definiu para descrição (por exemplo, 2 ou 4)
   const {
     characterName,
     setCharacterName,
@@ -18,22 +17,17 @@ export default function Descricao() {
     nextGameTime,
     errorMessage,
     handleSearch,
-  } = useGameLogic(2); // <-- Ajuste o número do modo conforme seu back-end
+  } = useGameLogic(2); 
 
   const formRef = useRef<HTMLFormElement>(null);
-
-  // 2) Quando o usuário digita no input
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     setCharacterName(event.target.value);
   }
 
-  // 3) Quando clica numa sugestão
   function handleSuggestionClick(name: string) {
     setCharacterName(name);
-    formRef.current?.requestSubmit(); // Submete o form automaticamente
+    formRef.current?.requestSubmit(); 
   }
-
-  // 4) Se quiser colorir as tentativas (verde/vermelho) com base no acerto
   function getBoxStyle(value: string) {
     if (!selectedCharacter || !selectedCharacter.nome) return styles.box;
     const correctName = selectedCharacter.nome.trim().toLowerCase();
@@ -106,8 +100,6 @@ export default function Descricao() {
           ))}
         </div>
       )}
-
-      {/* Modal de vitória */}
       {gameOver && selectedCharacter && (
         <VictoryModal
           character={selectedCharacter}

@@ -43,34 +43,37 @@ export default function VictoryModal({ character, attempts, nextGameTime, onClos
   const characterDescription = character?.titulo || "Descrição não disponível";
 
   return (
-    <div className={styles.modalOverlay}>
-      <div className={styles.modalContent}>
-        <h2> PARABÉNS, VOCÊ ACERTOU!!</h2>
-        <p><strong>Número de tentativas:</strong> {attempts}</p>
-
-        <img src={characterImage} alt={character.nome} className={styles.characterImage} />
-        <blockquote>"{characterDescription}"</blockquote>
-        <p><strong>{character.nome}</strong></p>
-
-        <p className={styles.disabledText}>Ver estatísticas</p>
-
-        <p>Próximo jogo em: <span className={styles.countdown}>{countdown}</span></p>
-
-        <hr />
-
-        <p><strong>Outros modos:</strong></p>
-        <div className={styles.iconContainer}>
-          <Link href="/imagem">
-            <Image src="/images/perg.png" alt="Modo Imagem" width={50} height={50} className={styles.icon} />
-          </Link>
-
-          <Link href="/descricao">
-            <Image src="/images/eye.png" alt="Modo Descrição" width={50} height={50} className={styles.icon} />
-          </Link>
-        </div>
-
-        <button onClick={onClose} className={styles.closeButton}>Fechar</button>
+<div className={styles.modalOverlay}>
+  <div className={styles.modalContent}>
+    <h2>Parabéns, você acertou!!</h2>
+    <p className={styles.titleTry}><strong>Número de tentativas:</strong> {attempts}</p>
+    <div className={styles.characterRow}>
+      <img src={characterImage} alt={character.nome} className={styles.characterImage} />
+      <div className={styles.characterInfo}>
+        <p className={styles.characterTitle}>"{characterDescription}"</p>
+        <p className={styles.characterName}>{character.nome}</p>
       </div>
     </div>
+
+
+    <p className={styles.disabledText}>Ver estatísticas</p>
+
+    <p>Próximo jogo em: <span className={styles.countdown}>{countdown}</span></p>
+
+    <hr />
+
+    <p><strong>Outros modos:</strong></p>
+    <div className={styles.iconContainer}>
+      <Link href="/imagem">
+        <Image src="/images/perg.png" alt="Modo Imagem" width={50} height={50} className={styles.icon} />
+      </Link>
+      <Link href="/descricao">
+        <Image src="/images/eye.png" alt="Modo Descrição" width={50} height={50} className={styles.icon} />
+      </Link>
+    </div>
+
+    <button onClick={onClose} className={styles.closeButton}>Fechar</button>
+  </div>
+</div>
   );
 }
