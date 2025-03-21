@@ -25,15 +25,15 @@
   margin: 0 auto 2rem;
   border: 2px solid #ffcc00;
   border-radius: 10px;
-  background: #000;
+  background: #e2e2e2;
   padding: 1rem;
 }
 
 .descriptionText {
   font-size: 1rem;
-  color: #fff;
+  color: #000;
   text-align: left;
-  white-space: pre-wrap; /* Se a descrição tiver quebras de linha */
+  white-space: pre-wrap;
 }
 
 .searchForm {
@@ -58,10 +58,11 @@
 }
 
 .searchButton {
-
   border: none;
   padding: 10px;
   cursor: pointer;
+  border-radius: 0 5px 5px 0;
+  background-color: #ffffff;
 }
 
 .searchButton img {
@@ -74,7 +75,69 @@
   font-weight: bold;
 }
 
-/* Lista de tentativas (cards) */
+/* CARD EXPANSIVO */
+
+.tipBox:hover .tipText {
+  opacity: 1;
+}
+
+.tipsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  margin-bottom: 1.5rem;
+}
+
+.tipBox {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  transition: height 0.3s ease, color 0.3s ease;
+  color: #858585;
+  cursor: pointer;
+}
+
+.tipBox:hover {
+  height: 120px;
+}
+
+.tipIconContainer {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tipIcon {
+  width: 50px;
+  height: 50px;
+  filter: invert(50%);
+  transition: filter 0.3s;
+}
+
+.tipRevealed .tipIcon {
+  filter: invert(100%);
+}
+
+.tipText {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-top: 8px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tipRevealed .tipText {
+  opacity: 1;
+  color: #fff;
+}
+
 .tableContainer {
   display: flex;
   flex-direction: column;

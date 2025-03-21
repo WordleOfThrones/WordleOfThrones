@@ -17,17 +17,45 @@ export default function Descricao() {
     nextGameTime,
     errorMessage,
     handleSearch,
-  } = useGameLogic(2); 
+  } = useGameLogic(2);
 
   const formRef = useRef<HTMLFormElement>(null);
+
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     setCharacterName(event.target.value);
   }
 
   function handleSuggestionClick(name: string) {
     setCharacterName(name);
-    formRef.current?.requestSubmit(); 
+    formRef.current?.requestSubmit();
   }
+
+  function getTipBoxClass(isRevealed: boolean) {
+    return isRevealed || gameOver
+      ? `${styles.tipBox} ${styles.tipRevealed}`
+      : styles.tipBox;
+  }
+
+  function getGeneroTip() {
+    if (!selectedCharacter) return "???";
+    const genero = selectedCharacter.genero || "???";
+    if (attempts >= 3 || gameOver) {
+      return `dica: ${genero}`;
+    } else {
+      return `gênero em (${3 - attempts}) tentativas`;
+    }
+  }
+
+  function getTituloTip() {
+    if (!selectedCharacter) return "???";
+    const titulo = selectedCharacter.titulo || "???";
+    if (attempts >= 5 || gameOver) {
+      return `dica: ${titulo}`;
+    } else {
+      return `título em (${5 - attempts}) tentativas`;
+    }
+  }
+
   function getBoxStyle(value: string) {
     if (!selectedCharacter || !selectedCharacter.nome) return styles.box;
     const correctName = selectedCharacter.nome.trim().toLowerCase();
@@ -43,8 +71,6 @@ export default function Descricao() {
 
       <div className={styles.searchContainer}>
         <h2 className={styles.title}>QUE PERSONAGEM POSSUI ESSA DESCRIÇÃO?</h2>
-
-        {/* Exibe a descrição do personagem */}
         {selectedCharacter && (
           <div className={styles.descriptionContainer}>
             <p className={styles.descriptionText}>
@@ -52,6 +78,31 @@ export default function Descricao() {
             </p>
           </div>
         )}
+{selectedCharacter && (
+  <div className={styles.tipsContainer}>
+    <div className={getTipBoxClass(attempts >= 3)}>
+      <div className={styles.tipIconContainer}>
+        <img
+          src="/venus-mars-solid.svg"
+          alt="Ícone Gênero"
+          className={styles.tipIcon}
+        />
+      </div>
+      <p className={styles.tipText}>{getGeneroTip()}</p>
+    </div>
+    <div className={getTipBoxClass(attempts >= 5)}>
+      <div className={styles.tipIconContainer}>
+        <img
+          src="/medal_icon-icons.com_69352.svg"
+          alt="Ícone Título"
+          className={styles.tipIcon}
+        />
+      </div>
+      <p className={styles.tipText}>{getTituloTip()}</p>
+    </div>
+  </div>
+)}
+
 
         {/* Formulário de busca */}
         <form ref={formRef} onSubmit={handleSearch} className={styles.searchForm}>
@@ -66,8 +117,6 @@ export default function Descricao() {
             <button type="submit" className={styles.searchButton}>
               <img src="/enter.svg" alt="Enviar" />
             </button>
-
-            {/* Sugestões de personagem */}
             <CharacterSuggestions
               characterName={characterName}
               setCharacterName={setCharacterName}
@@ -84,7 +133,7 @@ export default function Descricao() {
         <div className={styles.tableContainer}>
           {characters.map((character, idx) => (
             <div key={idx} className={getBoxStyle(character.nome)}>
-              {character.imagem ? (
+              {character?.imagem ? (
                 <img
                   src={character.imagem}
                   alt={character.nome || "Sem Imagem"}
@@ -100,6 +149,7 @@ export default function Descricao() {
           ))}
         </div>
       )}
+
       {gameOver && selectedCharacter && (
         <VictoryModal
           character={selectedCharacter}
