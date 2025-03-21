@@ -13,7 +13,7 @@ export default function Home() {
 
       <div className="textContainer">
         <p>Adivinhe diariamente um personagem de <br />
-          <span className="series">Game of Thrones</span> 
+          <span className="series">Game of Thrones</span>
           <span className="separator"> ou </span>
           <span className='seriess'>House of the Dragon</span>
         </p>
@@ -21,23 +21,25 @@ export default function Home() {
 
       <div className="buttonsContainer">
         <Link href={'/classic'}>
-          <Button 
+          <Button
             title="Classico"
             info="Consiga pistas a cada tentativa"
             iconsrc="/images/targeryan.png"
           />
         </Link>
-        <Button 
-          title="Descricao"
-          info="Adivinhe o personagem pela descrição"
-          iconsrc="/images/perg.png"
-        />
-         <Link href={'/imagem'}>
-        <Button 
-          title="Imagem"
-          info="Adivinhe o personagem pela foto desfocada"
-          iconsrc="/images/eye.png"
-        />
+        <Link href={'/descricao'}>
+          <Button
+            title="Descricao"
+            info="Adivinhe o personagem pela descrição"
+            iconsrc="/images/perg.png"
+          />
+        </Link>
+        <Link href={'/imagem'}>
+          <Button
+            title="Imagem"
+            info="Adivinhe o personagem pela foto desfocada"
+            iconsrc="/images/eye.png"
+          />
         </Link>
       </div>
 

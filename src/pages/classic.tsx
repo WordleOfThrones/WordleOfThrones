@@ -86,7 +86,6 @@ export default function Classic() {
   </div>
 
   <div className={styles.tableContainer}>
-
     {characters.length > 0 && (
       <div className={styles.gridContainer}>
               <div className={styles.column}>

@@ -30,6 +30,7 @@
     border-radius: 8px;
     display: block;
     margin: 10px auto;
+    
   }
   
   .blockquote {
@@ -70,5 +71,6 @@
   .icon {
     font-size: 2rem;
     cursor: pointer;
+    filter: invert(100%);
   }
   

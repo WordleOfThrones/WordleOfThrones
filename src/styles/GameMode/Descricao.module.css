@@ -1,0 +1,128 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.searchContainer {
+  width: 600px;
+  margin-top: 4rem;
+  text-align: center;
+  border: 2px solid #ffcc00;
+  border-radius: 10px;
+  padding: 2rem;
+  background: #000;
+}
+
+.title {
+  font-size: 1.5rem;
+  color: #ffcc00;
+  margin-bottom: 2rem;
+}
+
+.descriptionContainer {
+  margin: 0 auto 2rem;
+  border: 2px solid #ffcc00;
+  border-radius: 10px;
+  background: #000;
+  padding: 1rem;
+}
+
+.descriptionText {
+  font-size: 1rem;
+  color: #fff;
+  text-align: left;
+  white-space: pre-wrap; /* Se a descrição tiver quebras de linha */
+}
+
+.searchForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inputContainer {
+  position: relative;
+  display: flex;
+  width: 100%;
+  max-width: 350px;
+}
+
+.inputField {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 5px 0 0 5px;
+  font-size: 1rem;
+}
+
+.searchButton {
+
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.searchButton img {
+  width: 24px;
+}
+
+.errorMessage {
+  color: red;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* Lista de tentativas (cards) */
+.tableContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+  gap: 1rem;
+  width: 350px;
+  align-items: center;
+}
+
+.box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border: 2px solid;
+  border-radius: 5px;
+  font-weight: bold;
+  color: white;
+  font-size: 1rem;
+  background-color: #333;
+  min-height: 60px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.boxGreen {
+  background-color: #686020;
+  border-color: #786c08;
+}
+
+.boxRed {
+  background-color: #f44336;
+  border-color: #d32f2f;
+}
+
+.placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #aaa;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.guessCharacterImage {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+}
