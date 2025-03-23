@@ -3,16 +3,17 @@
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
+  background: transparent;
 }
 
 .searchContainer {
   width: 600px;
   margin-top: 4rem;
   text-align: center;
-  border: 2px solid #ffcc00;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 2rem;
-  background: #000;
+  background: rgba(0, 0, 0, 0.70);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
 }
 
 .title {
@@ -47,27 +48,44 @@
   display: flex;
   width: 100%;
   max-width: 350px;
+  margin-bottom: 1rem;
 }
 
 .inputField {
   flex: 1;
   padding: 10px;
-  border: none;
-  border-radius: 5px 0 0 5px;
+  border: 2px solid #caa207;
+  border-right: none;
+  border-radius: 6px 0 0 6px;
   font-size: 1rem;
+  outline: none;
+  background-color: #1a1a1a; 
+  color: #fff;
 }
 
 .searchButton {
-  border: none;
-  padding: 10px;
+  border: 2px solid #caa207;
+  border-left: none;
   cursor: pointer;
-  border-radius: 0 5px 5px 0;
-  background-color: #ffffff;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 6px 6px 0;
+  background-color: #caa207;
+  transition: background-color 0.3s;
+}
+
+.searchButton:hover {
+  background-color: #e8b109;
 }
 
 .searchButton img {
-  width: 24px;
+  width: 20px;
+  height: 20px;
+  filter: drop-shadow(0 0 1px #000);
 }
+
 
 .errorMessage {
   color: red;
@@ -105,6 +123,12 @@
 .tipBox:hover {
   height: 120px;
 }
+.descriptionText {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center; 
+  margin: 20px 0;
+}
 
 .tipIconContainer {
   width: 50px;
@@ -138,54 +162,69 @@
   color: #fff;
 }
 
+/* Container dos cards de tentativas */
 .tableContainer {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   margin-top: 2rem;
-  gap: 1rem;
-  width: 350px;
-  align-items: center;
+  gap: 15px;
+  width: 300px;
+  margin-bottom: 3rem;
 }
 
+/* Card base */
 .box {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 16px;
-  border: 2px solid;
-  border-radius: 5px;
+  gap: 20px;
+  padding: 12px 16px;
+  border: 3px solid;
+  border-radius: 8px;
   font-weight: bold;
-  color: white;
+  color: #fff;
   font-size: 1rem;
-  background-color: #333;
-  min-height: 60px;
+  background-color: #2c2c2c;
+  min-height: 80px;
   overflow: hidden;
   width: 100%;
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
+/* Card acerto */
 .boxGreen {
   background-color: #686020;
-  border-color: #786c08;
+  border-color: #3c3000;
 }
 
+/* Card erro */
 .boxRed {
-  background-color: #f44336;
-  border-color: #d32f2f;
+  background-color: #d7362d;
+  border-color: #801a18;
 }
 
+/* Imagem no card */
+.guessCharacterImage {
+  width: 60px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8%;
+}
+
+/* Placeholder quando não há imagem */
 .placeholder {
-  width: 40px;
-  height: 40px;
-  background-color: #aaa;
+  width: 60px;
+  height: 60px;
+  background-color: #444;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.guessCharacterImage {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 50%;
+/* Nome do personagem no card */
+.characterName {
+  flex: 1;
+  text-align: start;
+  font-size: 1.2rem;
 }

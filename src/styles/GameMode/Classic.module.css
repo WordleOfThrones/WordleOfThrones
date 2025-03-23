@@ -10,52 +10,51 @@
 
 
 .inputContainer {
-  position: sticky; 
-  top: 0; 
-  z-index: 999;
+  position: relative;
   display: flex;
-  align-items: center;
-  width: 300px;
-  margin: 0 auto;
-  border: 2px solid #000000; /* Borda dourada */
-  border-radius: 5px;
-  background-color: #ffffff;
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 1rem;
 }
 
-/* Estilização do input */
 .inputField {
   flex: 1;
-  border: none;
-  outline: none;
-  background: transparent; /* Fundo transparente para exibir o fundo do container */
-  color: #000000;
-  font-size: 16px;
   padding: 10px;
-  border-radius: 3px 0 0 3px;
+  border: 2px solid #caa207;
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  font-size: 1rem;
+  outline: none;
+  background-color: #1a1a1a; 
+  color: #fff;
 }
 
-
-/* Botão de busca */
 .searchButton {
-  background: none;
-  border: none;
+  border: 2px solid #caa207;
+  border-left: none;
   cursor: pointer;
   padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 0 6px 6px 0;
+  background-color: #caa207;
+  transition: background-color 0.3s;
 }
 
-/* Ícone dentro do botão */
+.searchButton:hover {
+  background-color: #e8b109; /* Dourado mais claro no hover */
+}
+
 .searchButton img {
   width: 20px;
   height: 20px;
-  color: #000000;
+  filter: drop-shadow(0 0 1px #000);
 }
 
 .gridContainer {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: 10px;
   width: 100%;
   max-width: 1200px;
@@ -161,11 +160,10 @@
 }
 
 .searchBox {
-  background-color: black;
+  background: rgba(0, 0, 0, 0.70);
   color: #ffcc00;
   text-align: center;
   padding: 20px;
-  border: 1px solid #ffcc00;
   border-radius: 10px;
   max-width: 600px;
   margin: 20px auto;
@@ -183,43 +181,15 @@
   flex-direction: column;
   align-items: center;
 }
-
-.inputContainer {
-  position: relative; 
-  display: flex;
-  align-items: center;
-  width: 350px; /* Ajuste a largura conforme quiser */
-  margin: 0 auto;
-}
-
-.inputField {
- 
-    flex: 1; 
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    outline: none;
-    border-radius: 5px 0 0 5px; /* Arredonda apenas a esquerda */
-  
-  
-}
-
-.searchButton {
-  background: none;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-}
-
 .searchButton img {
   width: 25px;
   height: 30px;
 }
 
 .tableContainer {
-  flex: 1; /* Ocupa o restante da tela */
-  overflow-y: auto; /* Habilita o scroll vertical */
-  padding: 20px; /* Espaçamento ao redor da tabela */
+  flex: 1; 
+  overflow-y: auto; 
+  padding: 20px;
 }
 
 .gridContainer {

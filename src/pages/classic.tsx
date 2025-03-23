@@ -60,7 +60,7 @@ export default function Classic() {
   <div className={styles.searchContainer}>
     <Header />
     <div className={styles.searchBox}>
-      <h2 className={styles.title}>ADIVINHE DIARIAMENTE UM PERSONAGEM</h2>
+      <h2 className={styles.title}>Adivinhe um perosnagem diariamente</h2>
       <form onSubmit={handleSearch} className={styles.searchForm}>
         <div className={styles.inputContainer}>
           <input

@@ -44,8 +44,14 @@ export default function Imagem() {
     handleSearch(e);
     setCharacterName("");
   }
-  const normalizeText = (text: string): string =>
-    text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
+
+  function normalizeText(text: string): string {
+    return text
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim()
+      .toLowerCase();
+  }
 
   function getBoxStyle(value: string) {
     if (!selectedCharacter || !selectedCharacter.nome) return styles.box;
@@ -60,7 +66,7 @@ export default function Imagem() {
     <div className={styles.pageContainer}>
       <Header />
       <div className={styles.searchContainer}>
-        <h2 className={styles.title}>QUE PERSONAGEM ESTÁ NESSA IMAGEM?</h2>
+        <h2 className={styles.title}>Que personagem está nessa imagem?</h2>
         {selectedCharacter && (
           <div className={styles.imageContainer}>
             <img
@@ -71,8 +77,11 @@ export default function Imagem() {
             />
           </div>
         )}
-
-        <form ref={formRef} onSubmit={onLocalHandleSearch} className={styles.searchForm}>
+        <form
+          ref={formRef}
+          onSubmit={onLocalHandleSearch}
+          className={styles.searchForm}
+        >
           <div className={styles.inputContainer}>
             <input
               type="text"
@@ -108,7 +117,7 @@ export default function Imagem() {
               ) : (
                 <div className={styles.placeholder}>Sem Imagem</div>
               )}
-              <span style={{ marginLeft: "8px" }}>
+              <span className={styles.characterName}>
                 {character?.nome ?? "Sem Nome"}
               </span>
             </div>

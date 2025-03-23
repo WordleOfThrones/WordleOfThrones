@@ -70,14 +70,15 @@ export default function Descricao() {
       <Header />
 
       <div className={styles.searchContainer}>
-        <h2 className={styles.title}>QUE PERSONAGEM POSSUI ESSA DESCRIÇÃO?</h2>
+        <h2 className={styles.title}>Que personagem possui essa descrição?</h2>
         {selectedCharacter && (
-          <div className={styles.descriptionContainer}>
-            <p className={styles.descriptionText}>
-              {selectedCharacter.descricao || "Sem Descrição"}
-            </p>
-          </div>
-        )}
+  <div className={styles.descriptionContainer}>
+    <p className={styles.descriptionText}>
+      {`“ ${selectedCharacter.descricao || 'Sem Descrição'} ”`}
+    </p>
+  </div>
+)}
+
         {selectedCharacter && (
           <div className={styles.tipsContainer}>
             <div className={getTipBoxClass(attempts >= 3)}>
