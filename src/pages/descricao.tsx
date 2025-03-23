@@ -78,30 +78,30 @@ export default function Descricao() {
             </p>
           </div>
         )}
-{selectedCharacter && (
-  <div className={styles.tipsContainer}>
-    <div className={getTipBoxClass(attempts >= 3)}>
-      <div className={styles.tipIconContainer}>
-        <img
-          src="/venus-mars-solid.svg"
-          alt="Ícone Gênero"
-          className={styles.tipIcon}
-        />
-      </div>
-      <p className={styles.tipText}>{getGeneroTip()}</p>
-    </div>
-    <div className={getTipBoxClass(attempts >= 5)}>
-      <div className={styles.tipIconContainer}>
-        <img
-          src="/medal_icon-icons.com_69352.svg"
-          alt="Ícone Título"
-          className={styles.tipIcon}
-        />
-      </div>
-      <p className={styles.tipText}>{getTituloTip()}</p>
-    </div>
-  </div>
-)}
+        {selectedCharacter && (
+          <div className={styles.tipsContainer}>
+            <div className={getTipBoxClass(attempts >= 3)}>
+              <div className={styles.tipIconContainer}>
+                <img
+                  src="/venus-mars-solid.svg"
+                  alt="Ícone Gênero"
+                  className={styles.tipIcon}
+                />
+              </div>
+              <p className={styles.tipText}>{getGeneroTip()}</p>
+            </div>
+            <div className={getTipBoxClass(attempts >= 5)}>
+              <div className={styles.tipIconContainer}>
+                <img
+                  src="/medal_icon-icons.com_69352.svg"
+                  alt="Ícone Título"
+                  className={styles.tipIcon}
+                />
+              </div>
+              <p className={styles.tipText}>{getTituloTip()}</p>
+            </div>
+          </div>
+        )}
 
 
         {/* Formulário de busca */}
@@ -123,6 +123,7 @@ export default function Descricao() {
               setInputManually={setCharacterName}
               onSuggestionClick={handleSuggestionClick}
             />
+
           </div>
           {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
         </form>

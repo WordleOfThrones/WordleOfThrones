@@ -1,4 +1,4 @@
-import { useRef, ChangeEvent } from "react";
+import { useRef, useState, ChangeEvent, FormEvent } from "react";
 import useGameLogic from "@/hooks/useGameLogic";
 import styles from "@/styles/GameMode/Imagem.module.css";
 import CharacterSuggestions from "@/components/GameFeatures/CharacterSuggestions";
@@ -17,10 +17,10 @@ export default function Imagem() {
     nextGameTime,
     errorMessage,
     handleSearch,
-    blurLevel, 
-  } = useGameLogic(3); 
+  } = useGameLogic(3);
 
   const formRef = useRef<HTMLFormElement>(null);
+  const [blur, setBlur] = useState(25);
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     setCharacterName(event.target.value);
@@ -31,41 +31,53 @@ export default function Imagem() {
     formRef.current?.requestSubmit();
   }
 
+  function onLocalHandleSearch(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!characterName.trim()) return;
+    if (
+      selectedCharacter &&
+      characterName.trim().toLowerCase() !==
+        selectedCharacter.nome.trim().toLowerCase()
+    ) {
+      setBlur((prev) => Math.max(prev - 3, 0));
+    }
+    handleSearch(e);
+    setCharacterName("");
+  }
   const normalizeText = (text: string): string =>
     text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
 
-  const getBoxStyle = (value: string) => {
+  function getBoxStyle(value: string) {
     if (!selectedCharacter || !selectedCharacter.nome) return styles.box;
-
     const correctValue = normalizeText(selectedCharacter.nome);
     const inputValue = normalizeText(value);
-
-    return correctValue === inputValue ? `${styles.box} ${styles.boxGreen}` : `${styles.box} ${styles.boxRed}`;
-  };
+    return correctValue === inputValue
+      ? `${styles.box} ${styles.boxGreen}`
+      : `${styles.box} ${styles.boxRed}`;
+  }
 
   return (
     <div className={styles.pageContainer}>
       <Header />
       <div className={styles.searchContainer}>
         <h2 className={styles.title}>QUE PERSONAGEM ESTÁ NESSA IMAGEM?</h2>
-
         {selectedCharacter && (
           <div className={styles.imageContainer}>
             <img
               src={selectedCharacter.imagem}
               className={styles.characterImage}
-              style={{ filter: `blur(${blurLevel}px)` }}
+              style={{ filter: `blur(${blur}px)` }}
               alt={selectedCharacter.nome || "Personagem"}
             />
           </div>
         )}
 
-        <form ref={formRef} onSubmit={handleSearch} className={styles.searchForm}>
+        <form ref={formRef} onSubmit={onLocalHandleSearch} className={styles.searchForm}>
           <div className={styles.inputContainer}>
             <input
               type="text"
               value={characterName}
-              onChange={(e) => setCharacterName(e.target.value)}
+              onChange={handleInputChange}
               placeholder="Escreva o nome de um personagem..."
               className={styles.inputField}
             />
@@ -88,15 +100,19 @@ export default function Imagem() {
           {characters.map((character, idx) => (
             <div key={idx} className={getBoxStyle(character.nome)}>
               {character.imagem ? (
-                <img src={character.imagem} alt={character.nome || "Sem Imagem"} className={styles.guessCharacterImage} />
+                <img
+                  src={character.imagem}
+                  alt={character.nome || "Sem Imagem"}
+                  className={styles.guessCharacterImage}
+                />
               ) : (
                 <div className={styles.placeholder}>Sem Imagem</div>
               )}
-              <span style={{ marginLeft: "8px" }}>{character?.nome ?? "Sem Nome"}</span>
+              <span style={{ marginLeft: "8px" }}>
+                {character?.nome ?? "Sem Nome"}
+              </span>
             </div>
           ))}
-
-
         </div>
       )}
 
@@ -111,4 +127,3 @@ export default function Imagem() {
     </div>
   );
 }
-
