@@ -40,7 +40,7 @@ export default function Descricao() {
     if (!selectedCharacter) return "???";
     const genero = selectedCharacter.genero || "???";
     if (attempts >= 3 || gameOver) {
-      return `dica: ${genero}`;
+      return `gênero: ${genero}`;
     } else {
       return `gênero em (${3 - attempts}) tentativas`;
     }
@@ -50,9 +50,9 @@ export default function Descricao() {
     if (!selectedCharacter) return "???";
     const titulo = selectedCharacter.titulo || "???";
     if (attempts >= 5 || gameOver) {
-      return `dica: ${titulo}`;
+      return ` título: ${titulo}`;
     } else {
-      return `título em (${5 - attempts}) tentativas`;
+      return ` título em (${5 - attempts}) tentativas`;
     }
   }
 

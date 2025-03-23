@@ -51,7 +51,7 @@ export default function VictoryModal({ character, attempts, nextGameTime, onClos
         <>
           <Link href="/descricao">
             <Image
-              src="/images/eye.png"
+              src="/images/perg.png"
               alt="Modo Descrição"
               width={50}
               height={50}
@@ -60,7 +60,7 @@ export default function VictoryModal({ character, attempts, nextGameTime, onClos
           </Link>
           <Link href="/imagem">
             <Image
-              src="/images/perg.png"
+              src="/images/eye.png"
               alt="Modo Imagem"
               width={50}
               height={50}
@@ -85,7 +85,7 @@ export default function VictoryModal({ character, attempts, nextGameTime, onClos
           </Link>
           <Link href="/imagem">
             <Image
-              src="/images/perg.png"
+              src="/images/eye.png"
               alt="Modo Imagem"
               width={50}
               height={50}
@@ -110,7 +110,7 @@ export default function VictoryModal({ character, attempts, nextGameTime, onClos
           </Link>
           <Link href="/descricao">
             <Image
-              src="/images/eye.png"
+              src="/images/perg.png"
               alt="Modo Descrição"
               width={50}
               height={50}

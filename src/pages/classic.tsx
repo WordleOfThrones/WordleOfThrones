@@ -54,13 +54,12 @@ export default function Classic() {
   function setInputManually(name: string) {
     setCharacterName(name);
   }
-
   return (
     <div className={styles.pageContainer}>
       <div className={styles.searchContainer}>
         <Header />
         <div className={styles.searchBox}>
-          <h2 className={styles.title}>Adivinhe um perosnagem diariamente</h2>
+          <h2 className={styles.title}>Adivinhe um personagem diariamente</h2>
           <form onSubmit={handleSearch} className={styles.searchForm}>
             <div className={styles.inputContainer}>
               <input

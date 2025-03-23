@@ -24,7 +24,7 @@
 
 .descriptionContainer {
   margin: 0 auto 2rem;
-  border: 2px solid #ffcc00;
+  border: 1px solid #ffcc00;
   border-radius: 10px;
   background: #e2e2e2;
   padding: 1rem;
@@ -108,7 +108,7 @@
 
 .tipBox {
   position: relative;
-  width: 80px;
+  width: 100px;
   height: 80px;
   background: transparent;
   display: flex;
@@ -143,7 +143,7 @@
   height: 50px;
   filter: invert(40%);
   transition: filter 0.3s;
-  margin-top: 20px;
+  margin-top: 12px;
 }
 
 .tipRevealed .tipIcon {
@@ -161,6 +161,7 @@
 .tipRevealed .tipText {
   opacity: 1;
   color: #fff;
+
 }
 
 /* Container dos cards de tentativas */
