@@ -131,6 +131,7 @@ export default function Imagem() {
           attempts={attempts}
           nextGameTime={nextGameTime}
           onClose={() => setGameOver(false)}
+          mode={3}
         />
       )}
     </div>

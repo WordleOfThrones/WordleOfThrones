@@ -152,14 +152,15 @@ export default function Descricao() {
         </div>
       )}
 
-      {gameOver && selectedCharacter && (
-        <VictoryModal
-          character={selectedCharacter}
-          attempts={attempts}
-          nextGameTime={nextGameTime}
-          onClose={() => setGameOver(false)}
-        />
-      )}
+{gameOver && selectedCharacter && (
+  <VictoryModal
+    character={selectedCharacter}
+    attempts={attempts}
+    nextGameTime={nextGameTime}
+    onClose={() => setGameOver(false)}
+    mode={2}
+  />
+)}
     </div>
   );
 }
