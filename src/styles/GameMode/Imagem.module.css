@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  background: transparent; /* Permite que o fundo principal apareça */
+  background: transparent;
 }
 
 .searchContainer {
@@ -31,18 +31,9 @@
   overflow: hidden;
   border-radius: 12px;
   background: radial-gradient(#111, #000);
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.7); /* sombra ao redor */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7); /* sombra ao redor */
 }
 
-.imageContainer::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 6px;
-  background-color: #979797;
-}
 
 .characterImage {
   width: 100%;

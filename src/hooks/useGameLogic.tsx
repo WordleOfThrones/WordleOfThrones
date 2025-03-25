@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect, FormEvent } from "react";
 import useFetchCharacter from "@/hooks/useFetchCharacter";
 
@@ -13,7 +14,10 @@ export default function useGameLogic(mode: number) {
   useEffect(() => {
     const fetchSelectedCharacter = async () => {
       try {
+        console.log("Buscando personagem sorteado...");
         const response = await fetch(`https://thronesapi-1.onrender.com/api/character/sorted-character/${mode}`);
+        console.log(">>> Status da resposta:", response.status);
+
         if (!response.ok) {
           throw new Error("Falha ao buscar personagem sorteado");
         }
@@ -35,7 +39,7 @@ export default function useGameLogic(mode: number) {
   }, [mode]);
 
   useEffect(() => {
-    if (characterData && characterData.imagem) {
+    if (characterData) {
       console.log("Personagem Buscado:", characterData);
 
       setCharacters((prevCharacters) => {

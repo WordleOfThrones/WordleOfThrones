@@ -1,3 +1,4 @@
+"use client";
 import { useRef, useState, ChangeEvent, FormEvent } from "react";
 import useGameLogic from "@/hooks/useGameLogic";
 import styles from "@/styles/GameMode/Imagem.module.css";
