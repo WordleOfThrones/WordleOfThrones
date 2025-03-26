@@ -1,9 +1,11 @@
-import { useRef, ChangeEvent } from "react";
+
+import { useRef, useState, ChangeEvent, FormEvent } from "react";
 import useGameLogic from "@/hooks/useGameLogic";
 import styles from "@/styles/GameMode/Descricao.module.css";
 import CharacterSuggestions from "@/components/GameFeatures/CharacterSuggestions";
 import Header from "@/components/Header";
 import VictoryModal from "@/components/GameFeatures/VictoryModal";
+import useScore from "@/hooks/useScore";
 
 export default function Descricao() {
   const {
@@ -21,6 +23,25 @@ export default function Descricao() {
 
   const formRef = useRef<HTMLFormElement>(null);
 
+  const { recordError, finalizeScore, getFinalScore, getTimePenalty, errors } = useScore();
+
+  const idUser = Number(localStorage.getItem("userId")) || 1;
+  const currentDate = new Date().toISOString().split("T")[0];
+  const baseDate = new Date("2023-03-25");
+  const current = new Date(currentDate);
+  const diffDays = Math.floor((current.getTime() - baseDate.getTime()) / (1000 * 3600 * 24));
+  const idDataJogo = diffDays + 1;
+  const [finalStats, setFinalStats] = useState<{
+    score: number;
+    attempts: number;
+    time: number;
+  } | null>(null);
+
+  function handleCloseModal(finalScore: number, attempts: number, timePenalty: number) {
+    setGameOver(false);
+    setFinalStats({ score: finalScore, attempts, time: timePenalty });
+  }
+
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     setCharacterName(event.target.value);
   }
@@ -28,6 +49,27 @@ export default function Descricao() {
   function handleSuggestionClick(name: string) {
     setCharacterName(name);
     formRef.current?.requestSubmit();
+  }
+
+  function onLocalHandleSearch(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!characterName.trim()) return;
+
+    if (
+      selectedCharacter &&
+      characterName.trim().toLowerCase() !== selectedCharacter.nome.trim().toLowerCase()
+    ) {
+      recordError();
+    } else if (
+      selectedCharacter &&
+      characterName.trim().toLowerCase() === selectedCharacter.nome.trim().toLowerCase()
+    ) {
+      finalizeScore();
+      setGameOver(true);
+    }
+
+    handleSearch(e);
+    setCharacterName("");
   }
 
   function getTipBoxClass(isRevealed: boolean) {
@@ -50,9 +92,9 @@ export default function Descricao() {
     if (!selectedCharacter) return "???";
     const titulo = selectedCharacter.titulo || "???";
     if (attempts >= 5 || gameOver) {
-      return ` Título: ${titulo}`;
+      return `Título: ${titulo}`;
     } else {
-      return ` título em (${5 - attempts}) tentativas`;
+      return `título em (${5 - attempts}) tentativas`;
     }
   }
 
@@ -72,12 +114,12 @@ export default function Descricao() {
       <div className={styles.searchContainer}>
         <h2 className={styles.title}>Que personagem possui essa descrição?</h2>
         {selectedCharacter && (
-  <div className={styles.descriptionContainer}>
-    <p className={styles.descriptionText}>
-      {`“ ${selectedCharacter.descricao || 'Sem Descrição'} ”`}
-    </p>
-  </div>
-)}
+          <div className={styles.descriptionContainer}>
+            <p className={styles.descriptionText}>
+              {`“ ${selectedCharacter.descricao || "Sem Descrição"} ”`}
+            </p>
+          </div>
+        )}
 
         {selectedCharacter && (
           <div className={styles.tipsContainer}>
@@ -104,9 +146,7 @@ export default function Descricao() {
           </div>
         )}
 
-
-        {/* Formulário de busca */}
-        <form ref={formRef} onSubmit={handleSearch} className={styles.searchForm}>
+        <form ref={formRef} onSubmit={onLocalHandleSearch} className={styles.searchForm}>
           <div className={styles.inputContainer}>
             <input
               type="text"
@@ -124,13 +164,11 @@ export default function Descricao() {
               setInputManually={setCharacterName}
               onSuggestionClick={handleSuggestionClick}
             />
-
           </div>
           {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
         </form>
       </div>
 
-      {/* Lista de tentativas (cards) */}
       {characters.length > 0 && (
         <div className={styles.tableContainer}>
           {characters.map((character, idx) => (
@@ -152,15 +190,35 @@ export default function Descricao() {
         </div>
       )}
 
-{gameOver && selectedCharacter && (
-  <VictoryModal
-    character={selectedCharacter}
-    attempts={attempts}
-    nextGameTime={nextGameTime}
-    onClose={() => setGameOver(false)}
-    mode={2}
-  />
-)}
+      {gameOver && selectedCharacter && (
+        <VictoryModal
+          character={selectedCharacter}
+          attempts={attempts}
+          nextGameTime={nextGameTime}
+          onClose={handleCloseModal}
+          mode={2}
+          errors={errors}
+          getFinalScore={getFinalScore}
+          getTimePenalty={getTimePenalty}
+          idUser={idUser}
+          idDataJogo={idDataJogo}
+        />
+      )}
+
+      {finalStats && (
+        <div className={styles.gameSummary}>
+          <h3>Resumo da Partida</h3>
+          <p>
+            <strong>Pontuação:</strong> {finalStats.score}
+          </p>
+          <p>
+            <strong>Tentativas:</strong> {finalStats.attempts}
+          </p>
+          <p>
+            <strong>Tempo:</strong> {finalStats.time} seg
+          </p>
+        </div>
+      )}
     </div>
   );
 }

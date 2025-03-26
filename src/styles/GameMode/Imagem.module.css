@@ -158,9 +158,31 @@
   align-items: center;
 }
 
-/* Nome do personagem no card */
 .characterName {
   flex: 1;
   text-align: start;
   font-size: 1.2rem;
 }
+.gameSummary {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 1rem;
+  margin: 2rem auto;
+  max-width: 400px;
+  text-align: center;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.gameSummary h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  color: #cfa751;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+}
+
+.gameSummary p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+

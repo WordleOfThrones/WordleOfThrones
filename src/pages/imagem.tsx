@@ -5,6 +5,7 @@ import styles from "@/styles/GameMode/Imagem.module.css";
 import CharacterSuggestions from "@/components/GameFeatures/CharacterSuggestions";
 import Header from "@/components/Header";
 import VictoryModal from "@/components/GameFeatures/VictoryModal";
+import useScore from "@/hooks/useScore";
 
 export default function Imagem() {
   const {
@@ -20,8 +21,30 @@ export default function Imagem() {
     handleSearch,
   } = useGameLogic(3);
 
-  const formRef = useRef<HTMLFormElement>(null);
+  const {
+    recordError,
+    finalizeScore,
+    getFinalScore,
+    getTimePenalty,
+    errors,
+  } = useScore();
+
   const [blur, setBlur] = useState(25);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [finalStats, setFinalStats] = useState<{
+    score: number;
+    attempts: number;
+    time: number;
+  } | null>(null);
+
+  function handleCloseModal(finalScore: number, attempts: number, timePenalty: number) {
+    setGameOver(false);
+    setFinalStats({
+      score: finalScore,
+      attempts,
+      time: timePenalty,
+    });
+  }
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     setCharacterName(event.target.value);
@@ -35,13 +58,21 @@ export default function Imagem() {
   function onLocalHandleSearch(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!characterName.trim()) return;
+
     if (
       selectedCharacter &&
-      characterName.trim().toLowerCase() !==
-        selectedCharacter.nome.trim().toLowerCase()
+      characterName.trim().toLowerCase() !== selectedCharacter.nome.trim().toLowerCase()
     ) {
       setBlur((prev) => Math.max(prev - 3, 0));
+      recordError();
+    } else if (
+      selectedCharacter &&
+      characterName.trim().toLowerCase() === selectedCharacter.nome.trim().toLowerCase()
+    ) {
+      finalizeScore();
+      setGameOver(true);
     }
+
     handleSearch(e);
     setCharacterName("");
   }
@@ -63,6 +94,13 @@ export default function Imagem() {
       : `${styles.box} ${styles.boxRed}`;
   }
 
+  const idUser = Number(localStorage.getItem("userId")) || 1;
+  const currentDate = new Date().toISOString().split("T")[0];
+  const baseDate = new Date("2023-03-25");
+  const current = new Date(currentDate);
+  const diffDays = Math.floor((current.getTime() - baseDate.getTime()) / (1000 * 3600 * 24));
+  const idDataJogo = diffDays + 1;
+
   return (
     <div className={styles.pageContainer}>
       <Header />
@@ -78,11 +116,7 @@ export default function Imagem() {
             />
           </div>
         )}
-        <form
-          ref={formRef}
-          onSubmit={onLocalHandleSearch}
-          className={styles.searchForm}
-        >
+        <form ref={formRef} onSubmit={onLocalHandleSearch} className={styles.searchForm}>
           <div className={styles.inputContainer}>
             <input
               type="text"
@@ -131,9 +165,28 @@ export default function Imagem() {
           character={selectedCharacter}
           attempts={attempts}
           nextGameTime={nextGameTime}
-          onClose={() => setGameOver(false)}
+          onClose={handleCloseModal} 
           mode={3}
+          errors={errors}
+          getFinalScore={getFinalScore}
+          getTimePenalty={getTimePenalty}
+          idUser={idUser}
+          idDataJogo={idDataJogo}
         />
+      )}
+      {finalStats && (
+        <div className={styles.gameSummary}>
+          <h3>Resumo da Partida</h3>
+          <p>
+            <strong>Pontuação:</strong> {finalStats.score}
+          </p>
+          <p>
+            <strong>Tentativas:</strong> {finalStats.attempts}
+          </p>
+          <p>
+            <strong>Tempo:</strong> {finalStats.time} seg
+          </p>
+        </div>
       )}
     </div>
   );
