@@ -8,7 +8,6 @@ import VictoryModal from "@/components/GameFeatures/VictoryModal";
 import useScore from "@/hooks/useScore";
 
 export default function Classic() {
-  // Lógica de jogo para o modo Clássico (mode = 1)
   const {
     characterName,
     setCharacterName,
@@ -32,19 +31,28 @@ export default function Classic() {
 
   const formRef = useRef<HTMLFormElement>(null);
 
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    if (gameOver) return;
     setCharacterName(event.target.value);
   }
-
 
   function handleSuggestionClick(name: string) {
     setCharacterName(name);
     formRef.current?.requestSubmit();
   }
+  function getIdDataJogo(base = "2023-03-25"): number {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const baseDate = new Date(base);
+    baseDate.setHours(0, 0, 0, 0);
 
+    const diffMs = today.getTime() - baseDate.getTime();
+    return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+  }
   function onLocalHandleSearch(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (gameOver) return;
     if (!characterName.trim()) return;
 
     if (selectedCharacter) {
@@ -54,7 +62,8 @@ export default function Classic() {
         recordError();
       } else {
         finalizeScore();
-        setGameOver(true);
+        setGameOver(true); 
+        setIsModalOpen(true);  
       }
     }
     handleSearch(e);
@@ -63,6 +72,7 @@ export default function Classic() {
 
   const normalizeText = (text: string): string =>
     text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
+
   const getBoxStyle = (field: string, value: string) => {
     if (!selectedCharacter || !selectedCharacter[field]) return styles.box;
 
@@ -71,8 +81,12 @@ export default function Classic() {
 
     if (correctValue === inputValue) return `${styles.box} ${styles.boxGreen}`;
 
-    const correctParts = new Set(correctValue.split("/").map((p) => p.trim()).filter(Boolean));
-    const inputParts = new Set(inputValue.split("/").map((p) => p.trim()).filter(Boolean));
+    const correctParts = new Set(
+      correctValue.split("/").map((p) => p.trim()).filter(Boolean)
+    );
+    const inputParts = new Set(
+      inputValue.split("/").map((p) => p.trim()).filter(Boolean)
+    );
 
     for (const part of inputParts) {
       if (correctParts.has(part)) return `${styles.box} ${styles.boxYellow}`;
@@ -83,16 +97,13 @@ export default function Classic() {
   function setInputManually(name: string) {
     setCharacterName(name);
   }
+
   const idUser = Number(localStorage.getItem("userId")) || 1;
-  const currentDate = new Date().toISOString().split("T")[0];
-  const baseDate = new Date("2023-03-25");
-  const current = new Date(currentDate);
-  const diffDays = Math.floor((current.getTime() - baseDate.getTime()) / (1000 * 3600 * 24));
-  const idDataJogo = diffDays + 1;
+  const idDataJogo = getIdDataJogo();
 
   function handleCloseModal(finalScore: number, attempts: number, timePenalty: number) {
-    setGameOver(false);
     setFinalStats({ score: finalScore, attempts, time: timePenalty });
+    setIsModalOpen(false);
   }
 
   return (
@@ -109,8 +120,9 @@ export default function Classic() {
                 onChange={handleInputChange}
                 placeholder="Escreva o nome de um personagem..."
                 className={styles.inputField}
+                disabled={gameOver}  
               />
-              <button type="submit" className={styles.searchButton}>
+              <button type="submit" className={styles.searchButton} disabled={gameOver}>
                 <img src="/enter.svg" alt="Enviar" />
               </button>
               <CharacterSuggestions
@@ -121,6 +133,11 @@ export default function Classic() {
             </div>
             {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
           </form>
+          {!isModalOpen && gameOver && (
+            <p className={styles.finishedMessage}>
+              Você já jogou hoje. Volte amanhã para um novo desafio!
+            </p>
+          )}
         </div>
       </div>
 
@@ -153,16 +170,12 @@ export default function Classic() {
                     key={character.id}
                     className={`${styles.box} ${isNew ? styles.boxNew : ""} ${getBoxStyle("genero", character.genero)}`}
                   >
-                    {character
-                      .genero
-                      .split("/")
-                      .map((g: string, i: number) => (
-                        <div key={i}>{g}</div>
-                      ))}
+                    {character.genero.split("/").map((g: string, i: number) => (
+                      <div key={i}>{g}</div>
+                    ))}
                   </div>
                 );
               })}
-
             </div>
 
             <div className={styles.column}>
@@ -221,7 +234,7 @@ export default function Classic() {
           </div>
         )}
 
-        {gameOver && selectedCharacter && (
+        {isModalOpen && gameOver && selectedCharacter && (
           <VictoryModal
             character={selectedCharacter}
             attempts={attempts}

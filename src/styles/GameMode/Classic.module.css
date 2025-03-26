@@ -87,7 +87,7 @@
 
 .gridContainer {
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   gap: 10px;
   width: 100%;
   max-width: 1200px;
@@ -192,8 +192,8 @@
 
 /* Cores de status */
 .boxGreen {
-  background-color: #686020;
-  border-color: #786c08;
+  background-color: #4F7942;
+  border-color: #37552e;
 }
 
 .boxRed {

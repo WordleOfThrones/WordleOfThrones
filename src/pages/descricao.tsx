@@ -1,4 +1,3 @@
-
 import { useRef, useState, ChangeEvent, FormEvent } from "react";
 import useGameLogic from "@/hooks/useGameLogic";
 import styles from "@/styles/GameMode/Descricao.module.css";
@@ -22,27 +21,34 @@ export default function Descricao() {
   } = useGameLogic(2);
 
   const formRef = useRef<HTMLFormElement>(null);
-
   const { recordError, finalizeScore, getFinalScore, getTimePenalty, errors } = useScore();
 
   const idUser = Number(localStorage.getItem("userId")) || 1;
-  const currentDate = new Date().toISOString().split("T")[0];
-  const baseDate = new Date("2023-03-25");
-  const current = new Date(currentDate);
-  const diffDays = Math.floor((current.getTime() - baseDate.getTime()) / (1000 * 3600 * 24));
-  const idDataJogo = diffDays + 1;
+  function getIdDataJogo(base = "2023-03-25"): number {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const baseDate = new Date(base);
+    baseDate.setHours(0, 0, 0, 0);
+    const diffMs = today.getTime() - baseDate.getTime();
+    return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+  }
+  const idDataJogo = getIdDataJogo();
+
   const [finalStats, setFinalStats] = useState<{
     score: number;
     attempts: number;
     time: number;
   } | null>(null);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   function handleCloseModal(finalScore: number, attempts: number, timePenalty: number) {
-    setGameOver(false);
     setFinalStats({ score: finalScore, attempts, time: timePenalty });
+    setIsModalOpen(false);
   }
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    if (gameOver) return;
     setCharacterName(event.target.value);
   }
 
@@ -53,21 +59,20 @@ export default function Descricao() {
 
   function onLocalHandleSearch(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (gameOver) return;
     if (!characterName.trim()) return;
 
-    if (
-      selectedCharacter &&
-      characterName.trim().toLowerCase() !== selectedCharacter.nome.trim().toLowerCase()
-    ) {
-      recordError();
-    } else if (
-      selectedCharacter &&
-      characterName.trim().toLowerCase() === selectedCharacter.nome.trim().toLowerCase()
-    ) {
-      finalizeScore();
-      setGameOver(true);
+    if (selectedCharacter) {
+      const guess = characterName.trim().toLowerCase();
+      const correct = selectedCharacter.nome.trim().toLowerCase();
+      if (guess !== correct) {
+        recordError();
+      } else {
+        finalizeScore();
+        setGameOver(true);
+        setIsModalOpen(true);
+      }
     }
-
     handleSearch(e);
     setCharacterName("");
   }
@@ -116,7 +121,7 @@ export default function Descricao() {
         {selectedCharacter && (
           <div className={styles.descriptionContainer}>
             <p className={styles.descriptionText}>
-              {`“ ${selectedCharacter.descricao || "Sem Descrição"} ”`}
+              {`“${selectedCharacter.descricao || "Sem Descrição"}”`}
             </p>
           </div>
         )}
@@ -154,8 +159,9 @@ export default function Descricao() {
               onChange={handleInputChange}
               placeholder="Escreva o nome de um personagem..."
               className={styles.inputField}
+              disabled={gameOver}
             />
-            <button type="submit" className={styles.searchButton}>
+            <button type="submit" className={styles.searchButton} disabled={gameOver}>
               <img src="/enter.svg" alt="Enviar" />
             </button>
             <CharacterSuggestions
@@ -167,6 +173,11 @@ export default function Descricao() {
           </div>
           {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
         </form>
+        {!isModalOpen && gameOver && (
+            <p className={styles.finishedMessage}>
+              Você já jogou hoje. Volte amanhã para um novo desafio!
+            </p>
+          )}
       </div>
 
       {characters.length > 0 && (
@@ -190,7 +201,7 @@ export default function Descricao() {
         </div>
       )}
 
-      {gameOver && selectedCharacter && (
+      {isModalOpen && gameOver && selectedCharacter && (
         <VictoryModal
           character={selectedCharacter}
           attempts={attempts}

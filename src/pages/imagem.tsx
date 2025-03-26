@@ -21,13 +21,7 @@ export default function Imagem() {
     handleSearch,
   } = useGameLogic(3);
 
-  const {
-    recordError,
-    finalizeScore,
-    getFinalScore,
-    getTimePenalty,
-    errors,
-  } = useScore();
+  const { recordError, finalizeScore, getFinalScore, getTimePenalty, errors } = useScore();
 
   const [blur, setBlur] = useState(25);
   const formRef = useRef<HTMLFormElement>(null);
@@ -36,43 +30,56 @@ export default function Imagem() {
     attempts: number;
     time: number;
   } | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  function getIdDataJogo(base = "2023-03-25"): number {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const baseDate = new Date(base);
+    baseDate.setHours(0, 0, 0, 0);
+    const diffMs = today.getTime() - baseDate.getTime();
+    return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+  }
+  const idDataJogo = getIdDataJogo();
 
   function handleCloseModal(finalScore: number, attempts: number, timePenalty: number) {
-    setGameOver(false);
     setFinalStats({
       score: finalScore,
       attempts,
       time: timePenalty,
     });
+    setIsModalOpen(false);
   }
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    if (gameOver) return;
     setCharacterName(event.target.value);
   }
 
   function handleSuggestionClick(name: string) {
+    if (gameOver) return;
     setCharacterName(name);
     formRef.current?.requestSubmit();
   }
 
   function onLocalHandleSearch(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (gameOver) return;
     if (!characterName.trim()) return;
 
-    if (
-      selectedCharacter &&
-      characterName.trim().toLowerCase() !== selectedCharacter.nome.trim().toLowerCase()
-    ) {
-      setBlur((prev) => Math.max(prev - 3, 0));
-      recordError();
-    } else if (
-      selectedCharacter &&
-      characterName.trim().toLowerCase() === selectedCharacter.nome.trim().toLowerCase()
-    ) {
-      finalizeScore();
-      setGameOver(true);
+    if (selectedCharacter) {
+      const guess = characterName.trim().toLowerCase();
+      const correct = selectedCharacter.nome.trim().toLowerCase();
+      if (guess !== correct) {
+        setBlur((prev) => Math.max(prev - 3, 0));
+        recordError();
+      } else {
+        finalizeScore();
+        setGameOver(true);
+        setBlur(0); // remove o blur para revelar a imagem
+        setIsModalOpen(true);
+      }
     }
-
     handleSearch(e);
     setCharacterName("");
   }
@@ -95,11 +102,6 @@ export default function Imagem() {
   }
 
   const idUser = Number(localStorage.getItem("userId")) || 1;
-  const currentDate = new Date().toISOString().split("T")[0];
-  const baseDate = new Date("2023-03-25");
-  const current = new Date(currentDate);
-  const diffDays = Math.floor((current.getTime() - baseDate.getTime()) / (1000 * 3600 * 24));
-  const idDataJogo = diffDays + 1;
 
   return (
     <div className={styles.pageContainer}>
@@ -124,8 +126,9 @@ export default function Imagem() {
               onChange={handleInputChange}
               placeholder="Escreva o nome de um personagem..."
               className={styles.inputField}
+              disabled={gameOver}
             />
-            <button type="submit" className={styles.searchButton}>
+            <button type="submit" className={styles.searchButton} disabled={gameOver}>
               <img src="/enter.svg" alt="Enviar" />
             </button>
             <CharacterSuggestions
@@ -137,6 +140,11 @@ export default function Imagem() {
           </div>
           {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
         </form>
+        {!isModalOpen && gameOver && (
+            <p className={styles.finishedMessage}>
+              Você já jogou hoje. Volte amanhã para um novo desafio!
+            </p>
+          )}
       </div>
 
       {characters.length > 0 && (
@@ -160,12 +168,12 @@ export default function Imagem() {
         </div>
       )}
 
-      {gameOver && selectedCharacter && (
+      {isModalOpen && gameOver && selectedCharacter && (
         <VictoryModal
           character={selectedCharacter}
           attempts={attempts}
           nextGameTime={nextGameTime}
-          onClose={handleCloseModal} 
+          onClose={handleCloseModal}
           mode={3}
           errors={errors}
           getFinalScore={getFinalScore}
