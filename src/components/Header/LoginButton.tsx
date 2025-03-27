@@ -7,9 +7,9 @@ export default function LoginButton() {
 
   return (
     <div className={styles.loginButtonContainer}>
-      <button className={styles.loginButton} onClick={navigateToRegister}>
+      {/* <button className={styles.loginButton} onClick={navigateToRegister}>
         SEM PERFIL
-      </button>
+      </button> */}
     </div>
   );
 }

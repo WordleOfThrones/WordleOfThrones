@@ -173,3 +173,11 @@ input:checked + .slider:before {
 .closeButton:hover {
   background-color: #4b2b15;
 }
+
+@media (max-width: 600px) {
+  .loginButton {
+    padding: 6px 5px;
+    font-size: 13px;
+    border-radius: 4px;
+  }
+}

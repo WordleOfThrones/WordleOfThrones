@@ -1,3 +1,4 @@
+/* OVERLAY DO MODAL */
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -11,14 +12,15 @@
   z-index: 999999;
 }
 
+/* CONTEÚDO DO MODAL */
 .modalContent {
   background: #1c1c1c;
   padding: 35px;
   border-radius: 10px;
   text-align: center;
   color: white;
-  max-width: 450px;
-  width: 90%;
+  max-width: 450px; /* Largura máxima para desktop */
+  width: 90%; /* Largura relativa para responsividade */
   border: 0.5px solid #c79c57;
 }
 
@@ -31,6 +33,7 @@
   margin: 10px 0;
 }
 
+/* LINHA DE PERSONAGENS */
 .characterRow {
   display: flex;
   justify-content: center;
@@ -38,7 +41,6 @@
   align-items: center;
   margin: 22px 0;
 }
-
 
 .characterTitle {
   font-size: 1rem;
@@ -94,7 +96,7 @@
 }
 
 .icon {
-  width: 40px; 
+  width: 40px;
   height: 40px;
   cursor: pointer;
   filter: invert(100%);
@@ -110,11 +112,49 @@
   cursor: pointer;
   margin-top: 15px;
 }
-.icon {
-    font-size: 2rem;
-    cursor: pointer;
-    filter: invert(100%);
-  }
-.titleTry{
+
+.titleTry {
   color: #FEDFA3;
+}
+
+@media (max-width: 768px) {
+
+  .modalContent {
+    padding: 15px; 
+  }
+
+  .modalContent h2 {
+    font-size: 1.4rem; 
+  }
+
+  .characterRow {
+    gap: 15px;
+  }
+
+  .characterImage {
+    width: 60px; 
+    height: 70px;
+  }
+
+  .characterTitle {
+    font-size: 0.9rem;
+  }
+
+  .characterName {
+    font-size: 1rem; 
+  }
+
+  .iconContainer {
+    gap: 30px; 
+  }
+
+  .icon {
+    width: 30px; 
+    height: 30px;
+  }
+
+  .closeButton {
+    padding: 8px 12px; 
+    font-size: 0.9rem; 
+  }
 }

@@ -266,4 +266,20 @@ export default function Classic() {
       )}
     </div>
   );
+
+  <div className={styles.tableContainer}>
+  {characters.length > 0 && (
+    <>
+      <p className={styles.scrollHint}>↔️ Role para o lado para ver mais colunas</p>
+
+      <div className={styles.scrollWrapper}>
+        <div className={styles.gridContainer}>
+          {/* ... colunas aqui ... */}
+        </div>
+      </div>
+    </>
+  )}
+</div>
+
 }
+

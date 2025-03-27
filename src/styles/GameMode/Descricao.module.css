@@ -1,48 +1,59 @@
+/* CONTAINER PRINCIPAL */
 .pageContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
   background: transparent;
+  overflow-x: hidden; /* Impede rolagem horizontal */
 }
 
+/* CONTAINER DE BUSCA */
 .searchContainer {
-  width: 600px;
+  width: 90%; /* Largura relativa */
+  max-width: 600px; /* Limita a largura máxima para desktops */
   margin-top: 4rem;
   text-align: center;
   border-radius: 12px;
   padding: 2rem;
-  background: rgba(0, 0, 0, 0.70);
+  background: rgba(0, 0, 0, 0.7);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
 }
 
+/* TÍTULO */
 .title {
   font-size: 1.5rem;
   color: #ffcc00;
   margin-bottom: 2rem;
 }
 
+/* CONTAINER DA DESCRIÇÃO */
 .descriptionContainer {
-  margin: 0 auto 2rem;
+  margin: 2rem auto; /* Aumenta o espaçamento superior e inferior */
   border: 1px solid #ffcc00;
   border-radius: 10px;
   background: #e2e2e2;
   padding: 1rem;
+  max-width: 90%; /* Limita a largura máxima */
 }
 
+/* TEXTO DA DESCRIÇÃO */
 .descriptionText {
   font-size: 1rem;
   color: #000;
   text-align: left;
   white-space: pre-wrap;
+  line-height: 1.4; /* Melhora a legibilidade */
 }
 
+/* FORMULÁRIO DE BUSCA */
 .searchForm {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* CONTAINER DO INPUT */
 .inputContainer {
   position: relative;
   display: flex;
@@ -51,6 +62,7 @@
   margin-bottom: 1rem;
 }
 
+/* CAMPO DE ENTRADA */
 .inputField {
   flex: 1;
   padding: 10px;
@@ -59,10 +71,11 @@
   border-radius: 6px 0 0 6px;
   font-size: 1rem;
   outline: none;
-  background-color: #1a1a1a; 
+  background-color: #1a1a1a;
   color: #fff;
 }
 
+/* BOTÃO DE ENVIO */
 .searchButton {
   border: 2px solid #caa207;
   border-left: none;
@@ -86,19 +99,14 @@
   filter: drop-shadow(0 0 1px #000);
 }
 
-
+/* MENSAGEM DE ERRO */
 .errorMessage {
   color: red;
   margin-top: 10px;
   font-weight: bold;
 }
 
-/* CARD EXPANSIVO */
-
-.tipBox:hover .tipText {
-  opacity: 1;
-}
-
+/* CONTAINER DOS CARDS EXPANSIVOS */
 .tipsContainer {
   display: flex;
   justify-content: center;
@@ -108,7 +116,7 @@
 
 .tipBox {
   position: relative;
-  width: 100px;
+  width: 45%; /* Largura relativa */
   height: 80px;
   background: transparent;
   display: flex;
@@ -122,12 +130,6 @@
 
 .tipBox:hover {
   height: 120px;
-}
-.descriptionText {
-  font-size: 1rem;
-  font-weight: bold;
-  text-align: center; 
-  margin: 20px 0;
 }
 
 .tipIconContainer {
@@ -161,21 +163,21 @@
   margin-top: 12px;
   opacity: 1;
   color: #fff;
-
 }
 
-/* Container dos cards de tentativas */
+/* CONTAINER DOS CARDS DE TENTATIVAS */
 .tableContainer {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   margin-top: 2rem;
   gap: 15px;
-  width: 300px;
+  width: 90%; /* Largura relativa */
+  max-width: 300px; /* Limita a largura máxima */
   margin-bottom: 3rem;
 }
 
-/* Card base */
+/* CARD BASE */
 .box {
   display: flex;
   align-items: center;
@@ -193,19 +195,19 @@
   transition: background-color 0.3s, border-color 0.3s;
 }
 
-/* Card acerto */
+/* CARD ACERTO */
 .boxGreen {
   background-color: #4F7942;
   border-color: #37552e;
 }
 
-/* Card erro */
+/* CARD ERRO */
 .boxRed {
   background-color: #d7362d;
   border-color: #801a18;
 }
 
-/* Imagem no card */
+/* IMAGEM NO CARD */
 .guessCharacterImage {
   width: 60px;
   height: 70px;
@@ -213,7 +215,7 @@
   border-radius: 8%;
 }
 
-/* Placeholder quando não há imagem */
+/* PLACEHOLDER QUANDO NÃO HÁ IMAGEM */
 .placeholder {
   width: 60px;
   height: 60px;
@@ -224,12 +226,14 @@
   align-items: center;
 }
 
-/* Nome do personagem no card */
+/* NOME DO PERSONAGEM NO CARD */
 .characterName {
   flex: 1;
   text-align: start;
   font-size: 1.2rem;
 }
+
+/* RESUMO DA PARTIDA */
 .gameSummary {
   background-color: rgba(0, 0, 0, 0.7);
   padding: 1rem;
@@ -253,3 +257,41 @@
   font-size: 1rem;
 }
 
+/* MEDIA QUERIES PARA DISPOSITIVOS MENORES */
+@media (max-width: 768px) {
+  .searchContainer {
+    margin-top: rem; /* Reduz o espaçamento superior */
+    padding: 1rem; /* Reduz o preenchimento interno */
+  }
+
+  .title {
+    font-size: 1.2rem; /* Diminui o tamanho da fonte */
+    margin-bottom: 1rem; /* Reduz o espaçamento inferior */
+  }
+
+  .tipsContainer {
+    gap: 20px; /* Reduz o espaçamento entre os cards */
+  }
+
+  .tipBox {
+    width: 40%; /* Ajusta a largura para telas menores */
+  }
+
+  .descriptionText {
+    font-size: 0.9rem; /* Reduz o tamanho da fonte */
+  }
+
+  .box {
+    min-height: 60px; /* Reduz a altura mínima dos cards */
+  }
+
+  .guessCharacterImage {
+    width: 50px; /* Reduz o tamanho da imagem */
+    height: 60px;
+  }
+
+  .placeholder {
+    width: 50px; /* Reduz o tamanho do placeholder */
+    height: 50px;
+  }
+}

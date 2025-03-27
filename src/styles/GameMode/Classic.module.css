@@ -3,7 +3,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
+  min-height: 1000vh;
+  width: 100vw;
 }
 
 .searchBox {
@@ -82,7 +83,8 @@
 .tableContainer {
   flex: 1;
   padding: 20px;
-
+  width: 100%;
+  overflow: hidden; /* scroll só no mobile */
 }
 
 .gridContainer {
@@ -92,6 +94,7 @@
   width: 100%;
   max-width: 1200px;
   padding: 10px;
+  margin: 0 auto;
 }
 
 .column {
@@ -142,8 +145,6 @@
   font-size: 0.9rem;
   box-sizing: border-box;
   transform-origin: center;
-  
-  /* Sem animação aqui! */
   transition: transform 0.2s ease;
 }
 
@@ -151,7 +152,6 @@
   transform: scale(1.02) rotateY(0);
 }
 
-/* Classe ESPECÍFICA para o novo card */
 .boxNew {
   animation: flipCard 0.5s ease forwards;
 }
@@ -167,7 +167,7 @@
   }
 }
 
-/* Placeholder para imagens ausentes */
+/* ========== IMAGENS / PLACEHOLDER ========== */
 .placeholder {
   display: flex;
   justify-content: center;
@@ -180,7 +180,6 @@
   text-align: center;
 }
 
-/* Imagens de personagem */
 .characterImage {
   width: 60px;
   height: 70px;
@@ -190,7 +189,7 @@
   background-color: transparent !important;
 }
 
-/* Cores de status */
+/* ========== CORES DE STATUS ========== */
 .boxGreen {
   background-color: #4F7942;
   border-color: #37552e;
@@ -228,4 +227,57 @@
 .gameSummary p {
   margin: 0.5rem 0;
   font-size: 1rem;
+}
+/* ========== MOBILE SCROLL ========== */
+@media (max-width: 768px) {
+  .pageContainer {
+    min-height: 100dvh; /* Altura real da viewport no mobile */
+  }
+  .tableContainer {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-color: #caa207 transparent;
+    scrollbar-width: thin;
+    max-width: 100%;
+  }
+
+  .tableContainer::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .tableContainer::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .tableContainer::-webkit-scrollbar-thumb {
+    background-color: #caa207;
+    border-radius: 4px;
+  }
+
+  .gridContainer {
+    grid-template-columns: repeat(8, 120px);
+    width: max-content;
+  }
+
+  .box {
+    font-size: 0.75rem;
+    height: 60px;
+  }
+
+  .characterImage {
+    width: 50px;
+    height: 60px;
+  }
+
+  .columnLabel {
+    font-size: 0.75rem;
+  }
+
+  .scrollHint {
+    display: block;
+    color: #fff;
+    text-align: center;
+    font-size: 0.85rem;
+    margin: 10px 0;
+  }
 }

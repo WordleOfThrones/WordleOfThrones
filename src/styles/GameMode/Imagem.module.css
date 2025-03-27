@@ -1,21 +1,26 @@
+/* CONTAINER PRINCIPAL */
 .pageContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
   background: transparent;
+  overflow-x: hidden; /* Impede rolagem horizontal */
 }
 
+/* CONTAINER DE BUSCA */
 .searchContainer {
-  width: 600px;
+  width: 90%; /* Largura relativa */
+  max-width: 600px; /* Limita a largura máxima para desktops */
   margin-top: 4rem;
   text-align: center;
   border-radius: 12px;
   padding: 2rem;
-  background: rgba(0, 0, 0, 0.70);
+  background: rgba(0, 0, 0, 0.7);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
 }
 
+/* TÍTULO */
 .title {
   font-size: 1.8rem;
   color: #caa207;
@@ -23,17 +28,19 @@
   text-shadow: 1px 1px 2px #000;
 }
 
+/* CONTAINER DA IMAGEM */
 .imageContainer {
   position: relative;
-  width: 220px;
-  height: 320px;
+  width: 80%; /* Largura relativa */
+  max-width: 220px; /* Limita a largura máxima */
+  height: auto; /* Altura automática para manter proporção */
+  aspect-ratio: 220 / 320; /* Mantém a proporção da imagem */
   margin: 0 auto 2rem;
   overflow: hidden;
   border-radius: 12px;
   background: radial-gradient(#111, #000);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7); /* sombra ao redor */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7); /* Sombra ao redor */
 }
-
 
 .characterImage {
   width: 100%;
@@ -42,12 +49,14 @@
   transition: filter 0.3s;
 }
 
+/* FORMULÁRIO DE BUSCA */
 .searchForm {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* CONTAINER DO INPUT */
 .inputContainer {
   position: relative;
   display: flex;
@@ -56,6 +65,7 @@
   margin-bottom: 1rem;
 }
 
+/* CAMPO DE ENTRADA */
 .inputField {
   flex: 1;
   padding: 10px;
@@ -64,10 +74,11 @@
   border-radius: 6px 0 0 6px;
   font-size: 1rem;
   outline: none;
-  background-color: #1a1a1a; 
+  background-color: #1a1a1a;
   color: #fff;
 }
 
+/* BOTÃO DE ENVIO */
 .searchButton {
   border: 2px solid #caa207;
   border-left: none;
@@ -82,7 +93,7 @@
 }
 
 .searchButton:hover {
-  background-color: #e8b109; 
+  background-color: #e8b109;
 }
 
 .searchButton img {
@@ -91,6 +102,7 @@
   filter: drop-shadow(0 0 1px #000);
 }
 
+/* MENSAGEM DE ERRO */
 .errorMessage {
   color: #ff4a4a;
   margin-top: 10px;
@@ -98,18 +110,19 @@
   text-shadow: 1px 1px 2px #000;
 }
 
-/* Container dos cards de tentativas */
+/* CONTAINER DOS CARDS DE TENTATIVAS */
 .tableContainer {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   margin-top: 2rem;
   gap: 15px;
-  width: 300px;
+  width: 90%; /* Largura relativa */
+  max-width: 300px; /* Limita a largura máxima */
   margin-bottom: 3rem;
 }
 
-/* Card base */
+/* CARD BASE */
 .box {
   display: flex;
   align-items: center;
@@ -127,19 +140,19 @@
   transition: background-color 0.3s, border-color 0.3s;
 }
 
-/* Card acerto */
+/* CARD ACERTO */
 .boxGreen {
   background-color: #4F7942;
   border-color: #37552e;
 }
 
-/* Card erro */
+/* CARD ERRO */
 .boxRed {
   background-color: #d7362d;
   border-color: #801a18;
 }
 
-/* Imagem no card */
+/* IMAGEM NO CARD */
 .guessCharacterImage {
   width: 60px;
   height: 70px;
@@ -147,7 +160,7 @@
   border-radius: 8%;
 }
 
-/* Placeholder quando não há imagem */
+/* PLACEHOLDER QUANDO NÃO HÁ IMAGEM */
 .placeholder {
   width: 60px;
   height: 60px;
@@ -158,11 +171,14 @@
   align-items: center;
 }
 
+/* NOME DO PERSONAGEM NO CARD */
 .characterName {
   flex: 1;
   text-align: start;
   font-size: 1.2rem;
 }
+
+/* RESUMO DA PARTIDA */
 .gameSummary {
   background-color: rgba(0, 0, 0, 0.7);
   padding: 1rem;
@@ -186,3 +202,37 @@
   font-size: 1rem;
 }
 
+/* MEDIA QUERIES PARA DISPOSITIVOS MENORES */
+@media (max-width: 768px) {
+  .searchContainer {
+    margin-top: rem; /* Reduz o espaçamento superior */
+    padding: 1rem; /* Reduz o preenchimento interno */
+  }
+
+  .title {
+    font-size: 1.5rem; /* Diminui o tamanho da fonte */
+    margin-bottom: 1rem; /* Reduz o espaçamento inferior */
+  }
+
+  .imageContainer {
+    max-width: 180px; /* Reduz o tamanho máximo da imagem */
+  }
+
+  .inputField {
+    font-size: 0.9rem; /* Reduz o tamanho da fonte */
+  }
+
+  .box {
+    min-height: 60px; /* Reduz a altura mínima dos cards */
+  }
+
+  .guessCharacterImage {
+    width: 50px; /* Reduz o tamanho da imagem */
+    height: 60px;
+  }
+
+  .placeholder {
+    width: 50px; /* Reduz o tamanho do placeholder */
+    height: 50px;
+  }
+}
