@@ -95,14 +95,14 @@ export default function VictoryModal({
         return (
           <>
             <Link href="/descricao"><Image src="/images/perg.png" alt="Descrição" width={50} height={50} className={styles.icon}/></Link>
-            <Link href="/imagem"><Image src="/images/eye.png" alt="Imagem" width={50} height={50} className={styles.icon}/></Link>
+            <Link href="/imagem"><Image src="/images/eye-solid.svg" alt="Imagem" width={50} height={50} className={styles.icon}/></Link>
           </>
         );
       case 2:
         return (
           <>
             <Link href="/classic"><Image src="/images/targeryan.png" alt="Clássico" width={50} height={50} className={styles.icon}/></Link>
-            <Link href="/imagem"><Image src="/images/eye.png" alt="Imagem" width={50} height={50} className={styles.icon}/></Link>
+            <Link href="/imagem"><Image src="/images/eye-solid.svg" alt="Imagem" width={50} height={50} className={styles.icon}/></Link>
           </>
         );
       case 3:

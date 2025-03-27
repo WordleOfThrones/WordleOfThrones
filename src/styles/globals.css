@@ -71,3 +71,36 @@ body {
   width: 100%;
 }
 
+
+
+.rotatingMessageContainer {
+  text-align: center;
+  width: 380px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(20, 20, 20, 0.5); 
+  border: 1px solid #000000;
+  border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+}
+
+.rotatingMessage {
+  font-size: 1rem;
+  color: #dddddd;
+  animation: fadeInOut 4s ease-in-out infinite;
+  transition: all 0.5s ease;
+  white-space: nowrap;
+  text-shadow: 1px 1px 4px black;
+}
+
+.highlight {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffd700;
+  margin-right: 0.3rem;
+}
+
