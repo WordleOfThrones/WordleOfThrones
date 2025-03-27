@@ -1,3 +1,4 @@
+"use client";
 import { useRef, useState, ChangeEvent, FormEvent, useEffect } from "react";
 import useGameLogic from "@/hooks/useGameLogic";
 import styles from "@/styles/GameMode/Descricao.module.css";
@@ -5,6 +6,7 @@ import CharacterSuggestions from "@/components/GameFeatures/CharacterSuggestions
 import Header from "@/components/Header";
 import VictoryModal from "@/components/GameFeatures/VictoryModal";
 import useScore from "@/hooks/useScore";
+import Image from "next/image";
 
 export default function Descricao() {
   const {
@@ -40,6 +42,7 @@ export default function Descricao() {
     const diffMs = today.getTime() - baseDate.getTime();
     return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
   }
+
   const idDataJogo = getIdDataJogo();
 
   const [finalStats, setFinalStats] = useState<{
@@ -67,8 +70,7 @@ export default function Descricao() {
 
   function onLocalHandleSearch(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (gameOver) return;
-    if (!characterName.trim()) return;
+    if (gameOver || !characterName.trim()) return;
 
     if (selectedCharacter) {
       const guess = characterName.trim().toLowerCase();
@@ -81,6 +83,7 @@ export default function Descricao() {
         setIsModalOpen(true);
       }
     }
+
     handleSearch(e);
     setCharacterName("");
   }
@@ -94,21 +97,17 @@ export default function Descricao() {
   function getGeneroTip() {
     if (!selectedCharacter) return "???";
     const genero = selectedCharacter.genero || "???";
-    if (attempts >= 3 || gameOver) {
-      return `Gênero: ${genero}`;
-    } else {
-      return `gênero em (${3 - attempts}) tentativas`;
-    }
+    return attempts >= 3 || gameOver
+      ? `Gênero: ${genero}`
+      : `gênero em (${3 - attempts}) tentativas`;
   }
 
   function getTituloTip() {
     if (!selectedCharacter) return "???";
     const titulo = selectedCharacter.titulo || "???";
-    if (attempts >= 5 || gameOver) {
-      return `Título: ${titulo}`;
-    } else {
-      return `título em (${5 - attempts}) tentativas`;
-    }
+    return attempts >= 5 || gameOver
+      ? `Título: ${titulo}`
+      : `título em (${5 - attempts}) tentativas`;
   }
 
   function getBoxStyle(value: string) {
@@ -126,6 +125,7 @@ export default function Descricao() {
 
       <div className={styles.searchContainer}>
         <h2 className={styles.title}>Que personagem possui essa descrição?</h2>
+
         {selectedCharacter && (
           <div className={styles.descriptionContainer}>
             <p className={styles.descriptionText}>
@@ -138,9 +138,11 @@ export default function Descricao() {
           <div className={styles.tipsContainer}>
             <div className={getTipBoxClass(attempts >= 3)}>
               <div className={styles.tipIconContainer}>
-                <img
+                <Image
                   src="/venus-mars-solid.svg"
                   alt="Ícone Gênero"
+                  width={24}
+                  height={24}
                   className={styles.tipIcon}
                 />
               </div>
@@ -148,9 +150,11 @@ export default function Descricao() {
             </div>
             <div className={getTipBoxClass(attempts >= 5)}>
               <div className={styles.tipIconContainer}>
-                <img
+                <Image
                   src="/medal_icon-icons.com_69352.svg"
                   alt="Ícone Título"
+                  width={24}
+                  height={24}
                   className={styles.tipIcon}
                 />
               </div>
@@ -170,7 +174,7 @@ export default function Descricao() {
               disabled={gameOver}
             />
             <button type="submit" className={styles.searchButton} disabled={gameOver}>
-              <img src="/enter.svg" alt="Enviar" />
+              <Image src="/enter.svg" alt="Enviar" width={24} height={24} />
             </button>
             <CharacterSuggestions
               characterName={characterName}
@@ -181,6 +185,7 @@ export default function Descricao() {
           </div>
           {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
         </form>
+
         {!isModalOpen && gameOver && (
           <p className={styles.finishedMessage}>
             Você já jogou hoje. Volte amanhã para um novo desafio!
@@ -193,10 +198,13 @@ export default function Descricao() {
           {characters.map((character, idx) => (
             <div key={idx} className={getBoxStyle(character.nome)}>
               {character?.imagem ? (
-                <img
+                <Image
                   src={character.imagem}
                   alt={character.nome || "Sem Imagem"}
+                  width={50}
+                  height={50}
                   className={styles.guessCharacterImage}
+                  unoptimized
                 />
               ) : (
                 <div className={styles.placeholder}>Sem Imagem</div>
@@ -227,15 +235,9 @@ export default function Descricao() {
       {finalStats && (
         <div className={styles.gameSummary}>
           <h3>Resumo da Partida</h3>
-          <p>
-            <strong>Pontuação:</strong> {finalStats.score}
-          </p>
-          <p>
-            <strong>Tentativas:</strong> {finalStats.attempts}
-          </p>
-          <p>
-            <strong>Tempo:</strong> {finalStats.time} seg
-          </p>
+          <p><strong>Pontuação:</strong> {finalStats.score}</p>
+          <p><strong>Tentativas:</strong> {finalStats.attempts}</p>
+          <p><strong>Tempo:</strong> {finalStats.time} seg</p>
         </div>
       )}
     </div>

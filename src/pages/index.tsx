@@ -1,7 +1,14 @@
+"use client";
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Link from "next/link";
 import Button from "../components/Button";
+
+const mensagensBase = [
+  (contagem: any) => ` ${contagem.classic} jogadores desbravaram o modo Clássico`,
+  (contagem: any) => ` ${contagem.descricao} jogadores decifraram através da Descrição`,
+  (contagem: any) => ` ${contagem.imagem} jogadores revelaram rostos pela Imagem`,
+];
 
 export default function Home() {
   const [contagem, setContagem] = useState({
@@ -11,11 +18,7 @@ export default function Home() {
   });
 
   const [mensagemIndex, setMensagemIndex] = useState(0);
-  const mensagens = [
-    ` ${contagem.classic} jogadores desbravaram o modo Clássico`,
-    ` ${contagem.descricao} jogadores decifraram através da Descrição`,
-    ` ${contagem.imagem} jogadores revelaram rostos pela Imagem`,
-  ];
+  const mensagens = mensagensBase.map(fn => fn(contagem));
 
   useEffect(() => {
     async function fetchJogos() {
@@ -50,7 +53,7 @@ export default function Home() {
       setMensagemIndex((prev) => (prev + 1) % mensagens.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, [contagem]);
+  }, [mensagens.length]);
 
   return (
     <div>
@@ -69,21 +72,34 @@ export default function Home() {
 
       <div className="buttonsContainer">
         <Link href={"/classic"}>
-          <Button title="Classico" info="Consiga pistas a cada tentativa" iconsrc="/images/targeryan.png" />
+          <Button
+            title="Classico"
+            info="Consiga pistas a cada tentativa"
+            iconsrc="/images/targeryan.png"
+          />
         </Link>
         <Link href={"/descricao"}>
-          <Button title="Descricao" info="Adivinhe o personagem pela descrição" iconsrc="/images/perg.png" />
+          <Button
+            title="Descricao"
+            info="Adivinhe o personagem pela descrição"
+            iconsrc="/images/perg.png"
+          />
         </Link>
         <Link href={"/imagem"}>
-          <Button title="Imagem" info="Adivinhe o personagem pela foto desfocada" iconsrc="/images/eye-solid.svg" />
+          <Button
+            title="Imagem"
+            info="Adivinhe o personagem pela foto desfocada"
+            iconsrc="/images/eye-solid.svg"
+          />
         </Link>
+
         <div className="rotatingMessageContainer">
           <p className="rotatingMessage">
-            <span className="highlight">{mensagens[mensagemIndex].split(" ")[1]}</span>
+            <span className="highlight">
+              {mensagens[mensagemIndex].split(" ")[1]}
+            </span>{" "}
             {mensagens[mensagemIndex].split(" ").slice(2).join(" ")}
           </p>
-
-
         </div>
       </div>
     </div>

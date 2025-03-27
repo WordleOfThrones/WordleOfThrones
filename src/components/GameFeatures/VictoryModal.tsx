@@ -35,8 +35,6 @@ export default function VictoryModal({
   const finalScore = getFinalScore();
   const timePenalty = getTimePenalty();
 
-  const modeMapping: Record<number, number> = { 1: 1, 2: 2, 3: 3 };
-
   useEffect(() => {
     if (!nextGameTime) return;
     const update = () => {
@@ -58,8 +56,10 @@ export default function VictoryModal({
     if (didPost.current) return;
     didPost.current = true;
 
+    const modeMapping: Record<number, number> = { 1: 1, 2: 2, 3: 3 };
+
     const body = {
-      idUser: idUser ?? null, 
+      idUser: idUser ?? null,
       idDataJogo,
       idModoJogo: modeMapping[mode],
       pontuacao: finalScore,
@@ -74,12 +74,12 @@ export default function VictoryModal({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     })
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error(`Erro ao salvar jogo: ${res.status}`);
         return res.json();
       })
-      .then(data => console.log("Jogo salvo com sucesso:", data))
-      .catch(err => console.error("Erro ao salvar jogo:", err));
+      .then((data) => console.log("Jogo salvo com sucesso:", data))
+      .catch((err) => console.error("Erro ao salvar jogo:", err));
   }, [mode, idUser, idDataJogo, attempts, timePenalty, finalScore]);
 
   const characterImage = character?.imagem || "/image/botao.png";
@@ -94,22 +94,34 @@ export default function VictoryModal({
       case 1:
         return (
           <>
-            <Link href="/descricao"><Image src="/images/perg.png" alt="Descrição" width={50} height={50} className={styles.icon}/></Link>
-            <Link href="/imagem"><Image src="/images/eye-solid.svg" alt="Imagem" width={50} height={50} className={styles.icon}/></Link>
+            <Link href="/descricao">
+              <Image src="/images/perg.png" alt="Descrição" width={50} height={50} className={styles.icon} />
+            </Link>
+            <Link href="/imagem">
+              <Image src="/images/eye-solid.svg" alt="Imagem" width={50} height={50} className={styles.icon} />
+            </Link>
           </>
         );
       case 2:
         return (
           <>
-            <Link href="/classic"><Image src="/images/targeryan.png" alt="Clássico" width={50} height={50} className={styles.icon}/></Link>
-            <Link href="/imagem"><Image src="/images/eye-solid.svg" alt="Imagem" width={50} height={50} className={styles.icon}/></Link>
+            <Link href="/classic">
+              <Image src="/images/targeryan.png" alt="Clássico" width={50} height={50} className={styles.icon} />
+            </Link>
+            <Link href="/imagem">
+              <Image src="/images/eye-solid.svg" alt="Imagem" width={50} height={50} className={styles.icon} />
+            </Link>
           </>
         );
       case 3:
         return (
           <>
-            <Link href="/classic"><Image src="/images/targeryan.png" alt="Clássico" width={50} height={50} className={styles.icon}/></Link>
-            <Link href="/descricao"><Image src="/images/perg.png" alt="Descrição" width={50} height={50} className={styles.icon}/></Link>
+            <Link href="/classic">
+              <Image src="/images/targeryan.png" alt="Clássico" width={50} height={50} className={styles.icon} />
+            </Link>
+            <Link href="/descricao">
+              <Image src="/images/perg.png" alt="Descrição" width={50} height={50} className={styles.icon} />
+            </Link>
           </>
         );
       default:
@@ -124,14 +136,22 @@ export default function VictoryModal({
         <p className={styles.titleTry}><strong>Tentativas:</strong> {attempts}</p>
         <p className={styles.titleTry}><strong>Pontuação:</strong> {finalScore}</p>
         <div className={styles.characterRow}>
-          <img src={characterImage} alt={character?.nome} className={styles.characterImage}/>
+          <Image
+            src={characterImage}
+            alt={character?.nome || "Imagem do personagem"}
+            width={80}
+            height={80}
+            className={styles.characterImage}
+          />
           <div className={styles.characterInfo}>
-            <p className={styles.characterTitle}>"{characterDescription}"</p>
+            <p className={styles.characterTitle}>{`"${characterDescription}"`}</p>
             <p className={styles.characterName}>{character?.nome}</p>
           </div>
         </div>
-        <p>Próximo jogo em: <span className={styles.countdown}>{countdown}</span></p>
-        <hr/>
+        <p>
+          Próximo jogo em: <span className={styles.countdown}>{countdown}</span>
+        </p>
+        <hr />
         <p><strong>Outros modos:</strong></p>
         <div className={styles.iconContainer}>{renderLinks()}</div>
         <button onClick={handleCloseClick} className={styles.closeButton}>Fechar</button>

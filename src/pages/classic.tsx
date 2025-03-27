@@ -1,3 +1,4 @@
+"use client";
 import { useRef, useState, useEffect, ChangeEvent, FormEvent } from "react";
 import useGameLogic from "@/hooks/useGameLogic";
 import styles from "@/styles/GameMode/Classic.module.css";
@@ -5,6 +6,7 @@ import CharacterSuggestions from "@/components/GameFeatures/CharacterSuggestions
 import Header from "@/components/Header";
 import VictoryModal from "@/components/GameFeatures/VictoryModal";
 import useScore from "@/hooks/useScore";
+import Image from "next/image";
 
 export default function Classic() {
   const {
@@ -28,11 +30,10 @@ export default function Classic() {
     time: number;
   } | null>(null);
 
-  const [idUser, setIdUser] = useState<number | null>(null); // ✅ pode ser nulo
+  const [idUser, setIdUser] = useState<number | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // ⚠️ Evita erro em SSR
   useEffect(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("userId");
@@ -58,6 +59,8 @@ export default function Classic() {
     const diffMs = today.getTime() - baseDate.getTime();
     return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
   }
+
+  const idDataJogo = getIdDataJogo();
 
   function onLocalHandleSearch(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -105,8 +108,6 @@ export default function Classic() {
     return `${styles.box} ${styles.boxRed}`;
   };
 
-  const idDataJogo = getIdDataJogo();
-
   function setInputManually(name: string): void {
     if (gameOver) return;
     setCharacterName(name);
@@ -126,10 +127,10 @@ export default function Classic() {
                 onChange={handleInputChange}
                 placeholder="Escreva o nome de um personagem..."
                 className={styles.inputField}
-                disabled={gameOver}  
+                disabled={gameOver}
               />
               <button type="submit" className={styles.searchButton} disabled={gameOver}>
-                <img src="/enter.svg" alt="Enviar" />
+                <Image src="/enter.svg" alt="Enviar" width={24} height={24} />
               </button>
               <CharacterSuggestions
                 characterName={characterName}
@@ -155,10 +156,13 @@ export default function Classic() {
               {characters.map((character, index) => (
                 <div key={index} className={styles.box}>
                   {character.imagem ? (
-                    <img
+                    <Image
                       src={character.imagem}
                       alt={character.nome || "Personagem"}
+                      width={50}
+                      height={50}
                       className={styles.characterImage}
+                      unoptimized // use isso se for imagem externa
                     />
                   ) : (
                     <div className={styles.placeholder}>Sem Imagem</div>
@@ -167,76 +171,25 @@ export default function Classic() {
               ))}
             </div>
 
-            <div className={styles.column}>
-              <div className={styles.columnLabel}>Gênero</div>
-              {characters.map((character, index) => {
-                const isNew = index === 0;
-                return (
-                  <div
-                    key={character.id}
-                    className={`${styles.box} ${isNew ? styles.boxNew : ""} ${getBoxStyle("genero", character.genero)}`}
-                  >
-                    {character.genero.split("/").map((g: string, i: number) => (
-                      <div key={i}>{g}</div>
-                    ))}
+            {/* Outras colunas */}
+            {[
+              { label: "Gênero", field: "genero" },
+              { label: "Série", field: "serie" },
+              { label: "Casa", field: "casa" },
+              { label: "Raça", field: "raca" },
+              { label: "Origem", field: "origem" },
+              { label: "Religião", field: "religiao" },
+              { label: "Primeira Aparição", field: "primeiraAparicao" },
+            ].map(({ label, field }) => (
+              <div key={field} className={styles.column}>
+                <div className={styles.columnLabel}>{label}</div>
+                {characters.map((character, index) => (
+                  <div key={index} className={getBoxStyle(field, character[field])}>
+                    {character[field]}
                   </div>
-                );
-              })}
-            </div>
-
-            <div className={styles.column}>
-              <div className={styles.columnLabel}>Série</div>
-              {characters.map((character, index) => (
-                <div key={index} className={getBoxStyle("serie", character.serie)}>
-                  {character.serie}
-                </div>
-              ))}
-            </div>
-
-            <div className={styles.column}>
-              <div className={styles.columnLabel}>Casa</div>
-              {characters.map((character, index) => (
-                <div key={index} className={getBoxStyle("casa", character.casa)}>
-                  {character.casa}
-                </div>
-              ))}
-            </div>
-
-            <div className={styles.column}>
-              <div className={styles.columnLabel}>Raça</div>
-              {characters.map((character, index) => (
-                <div key={index} className={getBoxStyle("raca", character.raca)}>
-                  {character.raca}
-                </div>
-              ))}
-            </div>
-
-            <div className={styles.column}>
-              <div className={styles.columnLabel}>Origem</div>
-              {characters.map((character, index) => (
-                <div key={index} className={getBoxStyle("origem", character.origem)}>
-                  {character.origem}
-                </div>
-              ))}
-            </div>
-
-            <div className={styles.column}>
-              <div className={styles.columnLabel}>Religião</div>
-              {characters.map((character, index) => (
-                <div key={index} className={getBoxStyle("religiao", character.religiao)}>
-                  {character.religiao}
-                </div>
-              ))}
-            </div>
-
-            <div className={styles.column}>
-              <div className={styles.columnLabel}>Primeira Aparição</div>
-              {characters.map((character, index) => (
-                <div key={index} className={getBoxStyle("primeiraAparicao", character.primeiraAparicao)}>
-                  {character.primeiraAparicao}
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ))}
           </div>
         )}
 
@@ -250,7 +203,7 @@ export default function Classic() {
             errors={errors}
             getFinalScore={getFinalScore}
             getTimePenalty={getTimePenalty}
-            idUser= {idUser}
+            idUser={idUser}
             idDataJogo={idDataJogo}
           />
         )}
@@ -259,15 +212,9 @@ export default function Classic() {
       {finalStats && (
         <div className={styles.gameSummary}>
           <h3>Resumo da Partida</h3>
-          <p>
-            <strong>Pontuação:</strong> {finalStats.score}
-          </p>
-          <p>
-            <strong>Tentativas:</strong> {finalStats.attempts}
-          </p>
-          <p>
-            <strong>Tempo:</strong> {finalStats.time} seg
-          </p>
+          <p><strong>Pontuação:</strong> {finalStats.score}</p>
+          <p><strong>Tentativas:</strong> {finalStats.attempts}</p>
+          <p><strong>Tempo:</strong> {finalStats.time} seg</p>
         </div>
       )}
     </div>

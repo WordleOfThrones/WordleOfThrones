@@ -6,6 +6,7 @@ import CharacterSuggestions from "@/components/GameFeatures/CharacterSuggestions
 import Header from "@/components/Header";
 import VictoryModal from "@/components/GameFeatures/VictoryModal";
 import useScore from "@/hooks/useScore";
+import Image from "next/image";
 
 export default function Imagem() {
   const {
@@ -25,13 +26,14 @@ export default function Imagem() {
 
   const [blur, setBlur] = useState(25);
   const [idUser, setIdUser] = useState<number | null>(null);
-  const formRef = useRef<HTMLFormElement>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [finalStats, setFinalStats] = useState<{
     score: number;
     attempts: number;
     time: number;
   } | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -48,14 +50,11 @@ export default function Imagem() {
     const diffMs = today.getTime() - baseDate.getTime();
     return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
   }
+
   const idDataJogo = getIdDataJogo();
 
   function handleCloseModal(finalScore: number, attempts: number, timePenalty: number) {
-    setFinalStats({
-      score: finalScore,
-      attempts,
-      time: timePenalty,
-    });
+    setFinalStats({ score: finalScore, attempts, time: timePenalty });
     setIsModalOpen(false);
   }
 
@@ -72,8 +71,7 @@ export default function Imagem() {
 
   function onLocalHandleSearch(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (gameOver) return;
-    if (!characterName.trim()) return;
+    if (gameOver || !characterName.trim()) return;
 
     if (selectedCharacter) {
       const guess = characterName.trim().toLowerCase();
@@ -84,20 +82,17 @@ export default function Imagem() {
       } else {
         finalizeScore();
         setGameOver(true);
-        setBlur(0); 
+        setBlur(0); // Revela imagem
         setIsModalOpen(true);
       }
     }
+
     handleSearch(e);
     setCharacterName("");
   }
 
   function normalizeText(text: string): string {
-    return text
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .trim()
-      .toLowerCase();
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
   }
 
   function getBoxStyle(value: string) {
@@ -112,18 +107,24 @@ export default function Imagem() {
   return (
     <div className={styles.pageContainer}>
       <Header />
+
       <div className={styles.searchContainer}>
         <h2 className={styles.title}>Que personagem está nessa imagem?</h2>
+
         {selectedCharacter && (
           <div className={styles.imageContainer}>
-            <img
+            <Image
               src={selectedCharacter.imagem}
+              alt={selectedCharacter.nome || "Personagem"}
+              width={200}
+              height={200}
+              unoptimized
               className={styles.characterImage}
               style={{ filter: `blur(${blur}px)` }}
-              alt={selectedCharacter.nome || "Personagem"}
             />
           </div>
         )}
+
         <form ref={formRef} onSubmit={onLocalHandleSearch} className={styles.searchForm}>
           <div className={styles.inputContainer}>
             <input
@@ -135,8 +136,9 @@ export default function Imagem() {
               disabled={gameOver}
             />
             <button type="submit" className={styles.searchButton} disabled={gameOver}>
-              <img src="/enter.svg" alt="Enviar" />
+              <Image src="/enter.svg" alt="Enviar" width={24} height={24} />
             </button>
+
             <CharacterSuggestions
               characterName={characterName}
               setCharacterName={setCharacterName}
@@ -146,6 +148,7 @@ export default function Imagem() {
           </div>
           {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
         </form>
+
         {!isModalOpen && gameOver && (
           <p className={styles.finishedMessage}>
             Você já jogou hoje. Volte amanhã para um novo desafio!
@@ -158,10 +161,13 @@ export default function Imagem() {
           {characters.map((character, idx) => (
             <div key={idx} className={getBoxStyle(character.nome)}>
               {character.imagem ? (
-                <img
+                <Image
                   src={character.imagem}
                   alt={character.nome || "Sem Imagem"}
+                  width={50}
+                  height={50}
                   className={styles.guessCharacterImage}
+                  unoptimized
                 />
               ) : (
                 <div className={styles.placeholder}>Sem Imagem</div>
