@@ -1,14 +1,8 @@
 "use client";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Link from "next/link";
 import Button from "../components/Button";
-
-const mensagensBase = [
-  (contagem: any) => ` ${contagem.classic} jogadores desbravaram o modo Clássico`,
-  (contagem: any) => ` ${contagem.descricao} jogadores decifraram através da Descrição`,
-  (contagem: any) => ` ${contagem.imagem} jogadores revelaram rostos pela Imagem`,
-];
 
 export default function Home() {
   const [contagem, setContagem] = useState({
@@ -18,34 +12,38 @@ export default function Home() {
   });
 
   const [mensagemIndex, setMensagemIndex] = useState(0);
-
-  const mensagens = useMemo(() => {
-    return mensagensBase.map(fn => fn(contagem));
-  }, [contagem]);
+  const mensagens = [
+    ` ${contagem.classic} jogadores desbravaram o modo Clássico`,
+    ` ${contagem.descricao} jogadores decifraram através da Descrição`,
+    ` ${contagem.imagem} jogadores revelaram rostos pela Imagem`,
+  ];
 
   useEffect(() => {
     async function fetchJogos() {
-      const hoje = new Date().toISOString().split("T")[0];
-      const res = await fetch(`https://thronesapi-1.onrender.com/api/game?data=${hoje}`);
-      const data = await res.json();
+      try {
+        const hoje = new Date().toISOString().split("T")[0];
+        const modos = [1, 2, 3];
+        const resultados: Record<number, number> = {};
 
-      const porModo: Record<number, Set<string>> = {};
-
-      data.registros.forEach((jogo: any) => {
-        if (jogo.status === 1) {
-          const key = `${jogo.idUser ?? "anon"}-${jogo.data}`;
-          if (!porModo[jogo.idModoJogo]) {
-            porModo[jogo.idModoJogo] = new Set();
-          }
-          porModo[jogo.idModoJogo].add(key);
+        for (const modo of modos) {
+          const res = await fetch(
+            `https://thronesapi-1.onrender.com/api/game?data=${hoje}&idModoJogo=${modo}`
+          );
+          const data = await res.json();
+          const jogosValidos = data.registros?.filter(
+            (jogo: any) => jogo.status === 1
+          ) || [];
+          resultados[modo] = jogosValidos.length;
         }
-      });
 
-      setContagem({
-        classic: porModo[1]?.size || 0,
-        descricao: porModo[2]?.size || 0,
-        imagem: porModo[3]?.size || 0,
-      });
+        setContagem({
+          classic: resultados[1] || 0,
+          descricao: resultados[2] || 0,
+          imagem: resultados[3] || 0,
+        });
+      } catch (err) {
+        console.error("Erro ao buscar estatísticas:", err);
+      }
     }
 
     fetchJogos();
@@ -74,21 +72,21 @@ export default function Home() {
       </div>
 
       <div className="buttonsContainer">
-        <Link href={"/classic"}>
+        <Link href="/classic">
           <Button
             title="Clássico"
             info="Consiga pistas a cada tentativa"
             iconsrc="/images/targeryan.png"
           />
         </Link>
-        <Link href={"/descricao"}>
+        <Link href="/descricao">
           <Button
             title="Descrição"
             info="Adivinhe o personagem pela descrição"
             iconsrc="/images/perg.png"
           />
         </Link>
-        <Link href={"/imagem"}>
+        <Link href="/imagem">
           <Button
             title="Imagem"
             info="Adivinhe o personagem pela foto desfocada"
