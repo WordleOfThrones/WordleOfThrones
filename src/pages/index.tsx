@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Header from "../components/Header";
 import Link from "next/link";
 import Button from "../components/Button";
@@ -18,7 +18,10 @@ export default function Home() {
   });
 
   const [mensagemIndex, setMensagemIndex] = useState(0);
-  const mensagens = mensagensBase.map(fn => fn(contagem));
+
+  const mensagens = useMemo(() => {
+    return mensagensBase.map(fn => fn(contagem));
+  }, [contagem]);
 
   useEffect(() => {
     async function fetchJogos() {
@@ -73,14 +76,14 @@ export default function Home() {
       <div className="buttonsContainer">
         <Link href={"/classic"}>
           <Button
-            title="Classico"
+            title="Clássico"
             info="Consiga pistas a cada tentativa"
             iconsrc="/images/targeryan.png"
           />
         </Link>
         <Link href={"/descricao"}>
           <Button
-            title="Descricao"
+            title="Descrição"
             info="Adivinhe o personagem pela descrição"
             iconsrc="/images/perg.png"
           />
