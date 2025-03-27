@@ -13,7 +13,7 @@ interface VictoryModalProps {
   errors: number;
   getFinalScore: () => number;
   getTimePenalty: () => number;
-  idUser: number;
+  idUser: number | null;
   idDataJogo: number;
 }
 
@@ -59,7 +59,7 @@ export default function VictoryModal({
     didPost.current = true;
 
     const body = {
-      idUser,
+      idUser: idUser ?? null, 
       idDataJogo,
       idModoJogo: modeMapping[mode],
       pontuacao: finalScore,

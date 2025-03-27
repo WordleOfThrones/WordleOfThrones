@@ -1,4 +1,4 @@
-import { useRef, useState, ChangeEvent, FormEvent } from "react";
+import { useRef, useState, ChangeEvent, FormEvent, useEffect } from "react";
 import useGameLogic from "@/hooks/useGameLogic";
 import styles from "@/styles/GameMode/Descricao.module.css";
 import CharacterSuggestions from "@/components/GameFeatures/CharacterSuggestions";
@@ -23,7 +23,15 @@ export default function Descricao() {
   const formRef = useRef<HTMLFormElement>(null);
   const { recordError, finalizeScore, getFinalScore, getTimePenalty, errors } = useScore();
 
-  const idUser = Number(localStorage.getItem("userId")) || 1;
+  const [idUser, setIdUser] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("userId");
+      setIdUser(stored ? Number(stored) : null);
+    }
+  }, []);
+
   function getIdDataJogo(base = "2023-03-25"): number {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -174,10 +182,10 @@ export default function Descricao() {
           {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
         </form>
         {!isModalOpen && gameOver && (
-            <p className={styles.finishedMessage}>
-              Você já jogou hoje. Volte amanhã para um novo desafio!
-            </p>
-          )}
+          <p className={styles.finishedMessage}>
+            Você já jogou hoje. Volte amanhã para um novo desafio!
+          </p>
+        )}
       </div>
 
       {characters.length > 0 && (

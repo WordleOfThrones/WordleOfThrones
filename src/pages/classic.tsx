@@ -1,5 +1,4 @@
-"use client";
-import { useRef, useState, ChangeEvent, FormEvent } from "react";
+import { useRef, useState, useEffect, ChangeEvent, FormEvent } from "react";
 import useGameLogic from "@/hooks/useGameLogic";
 import styles from "@/styles/GameMode/Classic.module.css";
 import CharacterSuggestions from "@/components/GameFeatures/CharacterSuggestions";
@@ -29,9 +28,18 @@ export default function Classic() {
     time: number;
   } | null>(null);
 
+  const [idUser, setIdUser] = useState<number | null>(null); // ✅ pode ser nulo
   const formRef = useRef<HTMLFormElement>(null);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // ⚠️ Evita erro em SSR
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("userId");
+      setIdUser(stored ? Number(stored) : null);
+    }
+  }, []);
+
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     if (gameOver) return;
     setCharacterName(event.target.value);
@@ -41,19 +49,19 @@ export default function Classic() {
     setCharacterName(name);
     formRef.current?.requestSubmit();
   }
+
   function getIdDataJogo(base = "2023-03-25"): number {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const baseDate = new Date(base);
     baseDate.setHours(0, 0, 0, 0);
-
     const diffMs = today.getTime() - baseDate.getTime();
     return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
   }
+
   function onLocalHandleSearch(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (gameOver) return;
-    if (!characterName.trim()) return;
+    if (gameOver || !characterName.trim()) return;
 
     if (selectedCharacter) {
       const guess = characterName.trim().toLowerCase();
@@ -62,12 +70,18 @@ export default function Classic() {
         recordError();
       } else {
         finalizeScore();
-        setGameOver(true); 
-        setIsModalOpen(true);  
+        setGameOver(true);
+        setIsModalOpen(true);
       }
     }
+
     handleSearch(e);
     setCharacterName("");
+  }
+
+  function handleCloseModal(finalScore: number, attempts: number, timePenalty: number) {
+    setFinalStats({ score: finalScore, attempts, time: timePenalty });
+    setIsModalOpen(false);
   }
 
   const normalizeText = (text: string): string =>
@@ -81,29 +95,21 @@ export default function Classic() {
 
     if (correctValue === inputValue) return `${styles.box} ${styles.boxGreen}`;
 
-    const correctParts = new Set(
-      correctValue.split("/").map((p) => p.trim()).filter(Boolean)
-    );
-    const inputParts = new Set(
-      inputValue.split("/").map((p) => p.trim()).filter(Boolean)
-    );
+    const correctParts = new Set(correctValue.split("/").map(p => p.trim()));
+    const inputParts = new Set(inputValue.split("/").map(p => p.trim()));
 
     for (const part of inputParts) {
       if (correctParts.has(part)) return `${styles.box} ${styles.boxYellow}`;
     }
+
     return `${styles.box} ${styles.boxRed}`;
   };
 
-  function setInputManually(name: string) {
-    setCharacterName(name);
-  }
-
-  const idUser = Number(localStorage.getItem("userId")) || 1;
   const idDataJogo = getIdDataJogo();
 
-  function handleCloseModal(finalScore: number, attempts: number, timePenalty: number) {
-    setFinalStats({ score: finalScore, attempts, time: timePenalty });
-    setIsModalOpen(false);
+  function setInputManually(name: string): void {
+    if (gameOver) return;
+    setCharacterName(name);
   }
 
   return (
@@ -244,7 +250,7 @@ export default function Classic() {
             errors={errors}
             getFinalScore={getFinalScore}
             getTimePenalty={getTimePenalty}
-            idUser={idUser}
+            idUser= {idUser}
             idDataJogo={idDataJogo}
           />
         )}
@@ -266,20 +272,4 @@ export default function Classic() {
       )}
     </div>
   );
-
-  <div className={styles.tableContainer}>
-  {characters.length > 0 && (
-    <>
-      <p className={styles.scrollHint}>↔️ Role para o lado para ver mais colunas</p>
-
-      <div className={styles.scrollWrapper}>
-        <div className={styles.gridContainer}>
-          {/* ... colunas aqui ... */}
-        </div>
-      </div>
-    </>
-  )}
-</div>
-
 }
-

@@ -1,28 +1,49 @@
-
 import { useState, useEffect, FormEvent } from "react";
 import useFetchCharacter from "@/hooks/useFetchCharacter";
 
 export default function useGameLogic(mode: number) {
   const { characterName, setCharacterName, characterData, errorMessage, handleSubmit } = useFetchCharacter();
-  
+
   const [characters, setCharacters] = useState<any[]>([]);
   const [selectedCharacter, setSelectedCharacter] = useState<any>(null);
   const [gameOver, setGameOver] = useState(false);
   const [attempts, setAttempts] = useState(0);
   const [nextGameTime, setNextGameTime] = useState<number | null>(null);
+  const [idUser, setIdUser] = useState<number | null>(null); 
+
+  function getIdDataJogo(base = "2023-03-25"): number {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const baseDate = new Date(base);
+    baseDate.setHours(0, 0, 0, 0);
+    const diffMs = today.getTime() - baseDate.getTime();
+    return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+  }
+
+  const idDataJogo = getIdDataJogo();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const playedKey = `played-mode-${mode}-${idDataJogo}`;
+      const alreadyPlayed = localStorage.getItem(playedKey);
+      if (alreadyPlayed === "true") {
+        setGameOver(true);
+      }
+      const storedId = localStorage.getItem("userId");
+      setIdUser(storedId ? Number(storedId) : null);
+    }
+  }, [mode, idDataJogo]);
 
   useEffect(() => {
     const fetchSelectedCharacter = async () => {
       try {
-        console.log("Buscando personagem sorteado...");
         const response = await fetch(`https://thronesapi-1.onrender.com/api/character/sorted-character/${mode}`);
-        console.log(">>> Status da resposta:", response.status);
-
         if (!response.ok) {
           throw new Error("Falha ao buscar personagem sorteado");
         }
         const data = await response.json();
         setSelectedCharacter(data);
+
         const now = new Date();
         const resetTime = new Date(now);
         resetTime.setHours(0, 0, 0, 0);
@@ -40,8 +61,6 @@ export default function useGameLogic(mode: number) {
 
   useEffect(() => {
     if (characterData) {
-      console.log("Personagem Buscado:", characterData);
-
       setCharacters((prevCharacters) => {
         if (!prevCharacters.some((char) => char.nome === characterData.nome)) {
           return [characterData, ...prevCharacters];
@@ -69,10 +88,12 @@ export default function useGameLogic(mode: number) {
 
     if (selectedCharacter) {
       if (characterName.toLowerCase().trim() === selectedCharacter.nome.toLowerCase().trim()) {
-        console.log("🎉 Acertou! Atualizando gameOver para true");
         setGameOver(true);
+        const playedKey = `played-mode-${mode}-${idDataJogo}`;
+        localStorage.setItem(playedKey, "true");
       }
     }
+
     setCharacterName("");
   };
 
@@ -87,6 +108,8 @@ export default function useGameLogic(mode: number) {
     nextGameTime,
     errorMessage,
     handleSearch,
+    idUser, 
+    idDataJogo,
     blurLevel: 30,
   };
 }

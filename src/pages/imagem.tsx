@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState, ChangeEvent, FormEvent } from "react";
+import { useRef, useState, useEffect, ChangeEvent, FormEvent } from "react";
 import useGameLogic from "@/hooks/useGameLogic";
 import styles from "@/styles/GameMode/Imagem.module.css";
 import CharacterSuggestions from "@/components/GameFeatures/CharacterSuggestions";
@@ -24,6 +24,7 @@ export default function Imagem() {
   const { recordError, finalizeScore, getFinalScore, getTimePenalty, errors } = useScore();
 
   const [blur, setBlur] = useState(25);
+  const [idUser, setIdUser] = useState<number | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const [finalStats, setFinalStats] = useState<{
     score: number;
@@ -31,6 +32,13 @@ export default function Imagem() {
     time: number;
   } | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("userId");
+      setIdUser(stored ? Number(stored) : null);
+    }
+  }, []);
 
   function getIdDataJogo(base = "2023-03-25"): number {
     const today = new Date();
@@ -76,7 +84,7 @@ export default function Imagem() {
       } else {
         finalizeScore();
         setGameOver(true);
-        setBlur(0); // remove o blur para revelar a imagem
+        setBlur(0); 
         setIsModalOpen(true);
       }
     }
@@ -100,8 +108,6 @@ export default function Imagem() {
       ? `${styles.box} ${styles.boxGreen}`
       : `${styles.box} ${styles.boxRed}`;
   }
-
-  const idUser = Number(localStorage.getItem("userId")) || 1;
 
   return (
     <div className={styles.pageContainer}>
@@ -141,10 +147,10 @@ export default function Imagem() {
           {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
         </form>
         {!isModalOpen && gameOver && (
-            <p className={styles.finishedMessage}>
-              Você já jogou hoje. Volte amanhã para um novo desafio!
-            </p>
-          )}
+          <p className={styles.finishedMessage}>
+            Você já jogou hoje. Volte amanhã para um novo desafio!
+          </p>
+        )}
       </div>
 
       {characters.length > 0 && (
@@ -182,18 +188,13 @@ export default function Imagem() {
           idDataJogo={idDataJogo}
         />
       )}
+
       {finalStats && (
         <div className={styles.gameSummary}>
           <h3>Resumo da Partida</h3>
-          <p>
-            <strong>Pontuação:</strong> {finalStats.score}
-          </p>
-          <p>
-            <strong>Tentativas:</strong> {finalStats.attempts}
-          </p>
-          <p>
-            <strong>Tempo:</strong> {finalStats.time} seg
-          </p>
+          <p><strong>Pontuação:</strong> {finalStats.score}</p>
+          <p><strong>Tentativas:</strong> {finalStats.attempts}</p>
+          <p><strong>Tempo:</strong> {finalStats.time} seg</p>
         </div>
       )}
     </div>

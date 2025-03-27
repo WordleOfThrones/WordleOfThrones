@@ -23,7 +23,7 @@ export default function useScore() {
 
   function getFinalScore() {
     const baseScore = 1000;
-    const penaltyErrors = errors * 30;
+    const penaltyErrors = errors * 20;
     let penaltyTime = 0;
 
     if (firstErrorTime) {
